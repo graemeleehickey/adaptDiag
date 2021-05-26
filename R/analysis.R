@@ -9,7 +9,7 @@
 #'   interim analysis.
 
 #' @inheritParams single_trial
-#' 
+#'
 #' @importFrom extraDistr rbbinom
 #' @importFrom stats pbeta
 #'
@@ -23,20 +23,21 @@
 #' - The true negative count (`tn`)
 #' - The false positive count (`fp`)
 #' - The false negative count (`fn`)
-#' 
+#'
 #' @noRd
 analysis <- function(data, k,
                      sens_pg, spec_pg,
                      prior_sens, prior_spec, prior_prev,
+                     succ_sens, succ_spec,
                      n_at_looks,
                      n_mc) {
-  
-  dat <- subset(data, stage <= k)
+
+  dat <- data[data$stage <= k, ]
   tab2x2 <- with(dat, table(ref_pos, test_pos))
   if (!all(dim(tab2x2) == c(2, 2))) {
     stop("Contingency table has wrong dimensions")
   }
-  
+
   # Posterior shape parameters
   alpha_sens <- prior_sens[1] + tab2x2[2, 2]
   beta_sens  <- prior_sens[2] + tab2x2[2, 1]
@@ -44,81 +45,89 @@ analysis <- function(data, k,
   beta_spec  <- prior_spec[2] + tab2x2[1, 2]
   alpha_prev <- prior_prev[1] + sum(tab2x2[2, ])
   beta_prev  <- prior_prev[2] + sum(tab2x2[1, ])
-  
+
   # Posterior probability of exceeding sensitivity PG (current stage)
-  pp_sens <- pbeta(sens_pg, 
-                   shape1 = alpha_sens, 
+  pp_sens <- pbeta(sens_pg,
+                   shape1 = alpha_sens,
                    shape2 = beta_sens,
                    lower.tail = FALSE)
-  
+
   # Posterior probability of exceeding specificity PG (current stage)
   pp_spec <- pbeta(spec_pg,
                    shape1 = alpha_spec,
                    shape2 = beta_spec,
                    lower.tail = FALSE)
-  
+
   n_max <- max(n_at_looks)
   n_stages <- length(n_at_looks)
   n_remain <- max(n_at_looks) - n_at_looks[k]
-  
+
+  sens_hat <- qbeta(c(0.025, 0.5, 0.975),
+                    shape1 = alpha_sens,
+                    shape2 = beta_sens)
+
+  spec_hat <- qbeta(c(0.025, 0.5, 0.975),
+                    shape1 = alpha_spec,
+                    shape2 = beta_spec)
+
   # Posterior predictive probability of success at max. sample size
   if (k < n_stages) {
-    
+
     # Not yet at the final look
     # Posterior sample of number of reference positive cases remaining
     ref_pos_remain <- rbbinom(n_mc,
                               size = n_remain,
                               alpha = alpha_prev,
                               beta = beta_prev)
-    
+
     # Posterior sample of number of reference negative cases remaining
     ref_neg_remain <- n_remain - ref_pos_remain
-    
+
     # Posterior sample of number of test positive cases from reference
     # positive cases remaining
     ref_pos_test_pos_remain <- rbbinom(n_mc,
                                        size = ref_pos_remain,
                                        alpha = alpha_sens,
                                        beta = beta_sens)
-    
+
     # Posterior sample of number of test negative cases from reference
     # negative cases remaining
     ref_neg_test_neg_remain <- rbbinom(n_mc,
                                        size = ref_neg_remain,
                                        alpha = alpha_spec,
                                        beta = beta_spec)
-    
+
     # Posterior probability of exceeding sensitivity PG (max n)
     # - Will give a posterior probability for each simulation (length n_mc)
-    pp_sens_max_n <- pbeta(sens_pg, 
-                           shape1 = alpha_sens + ref_pos_test_pos_remain, 
+    pp_sens_max_n <- pbeta(sens_pg,
+                           shape1 = alpha_sens + ref_pos_test_pos_remain,
                            shape2 = beta_sens + (ref_pos_remain - ref_pos_test_pos_remain),
                            lower.tail = FALSE)
-    
+
     # Predictive posterior probability of eventual success at max n (sensitivity)
     ppp_succ_sens <- mean(pp_sens_max_n >= succ_sens)
-    
+
     # Posterior probability of exceeding specificity PG (max n)
     # - Will give a posterior probability for each simulation (length n_mc)
-    pp_spec_max_n <- pbeta(spec_pg, 
-                           shape1 = alpha_spec + ref_neg_test_neg_remain, 
+    pp_spec_max_n <- pbeta(spec_pg,
+                           shape1 = alpha_spec + ref_neg_test_neg_remain,
                            shape2 = beta_spec + (ref_neg_remain - ref_neg_test_neg_remain),
                            lower.tail = FALSE)
-    
+
     # Predictive posterior probability of eventual success at max n (specificity)
     ppp_succ_spec <- mean(pp_spec_max_n >= succ_spec)
-    
+
     # Predictive posterior probability of eventual success at max n (both)
     ppp_succ_both <- mean((pp_sens_max_n >= succ_sens) & (pp_spec_max_n >= succ_spec))
-    
+
   } else {
     # At final look, no need to calculate expected success
     ppp_succ_sens <- NA
     ppp_succ_spec <- NA
     ppp_succ_both <- NA
   }
-  
-  out <- data.frame(stage = k,                                                                                                                                        
+
+  out <- data.frame(stage = k,
                     pp_sens = pp_sens,
                     pp_spec = pp_spec,
                     ppp_succ_sens = ppp_succ_sens,
@@ -127,8 +136,14 @@ analysis <- function(data, k,
                     tp = tab2x2[2, 2],
                     tn = tab2x2[1, 1],
                     fp = tab2x2[1, 2],
-                    fn = tab2x2[2, 1])
-  
+                    fn = tab2x2[2, 1],
+                    sens_hat = sens_hat[2],
+                    sens_CrI2.5 = sens_hat[1],
+                    sens_CrI97.5 = sens_hat[3],
+                    spec_hat = spec_hat[2],
+                    spec_CrI2.5 = spec_hat[1],
+                    spec_CrI97.5 = spec_hat[3])
+
   return(out)
-  
+
 }

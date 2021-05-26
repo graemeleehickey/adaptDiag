@@ -1,24 +1,24 @@
 #' @title Simulate a complete dataset
-#' 
+#'
 #' @description Simulate a single dataset for a diagnostic test under the
 #'   assumption of a gold standard reference and potentially adaptive
 #'   group-sequential design.
 #'
 #' @param n integer. Maximum sample size for the trial.
 #' @inheritParams single_trial
-#' 
+#'
 #' @importFrom stats rbinom
-#'    
+#'
 #' @return Simulated data frame with columns for:
-#' 
+#'
 #' - Subject ID
 #' - Reference test outcome (`1 =` positive, `0 =` negative)
 #' - Diagnostic test outcome (`1 =` positive, `0 =` negative)
 #' - Stage of the adaptive analysis (integer)
-#' 
+#'
 #' @noRd
 simulate_data <- function(n, n_at_looks, sens_true, spec_true, prev_true) {
-  
+
   id <- 1:n
   stage <- vector(length = n)
   if (!is.null(n_at_looks)) {
@@ -29,9 +29,9 @@ simulate_data <- function(n, n_at_looks, sens_true, spec_true, prev_true) {
     stage <- rep(1, n)
   }
   ref_pos  <- rbinom(n, 1, prev_true)
-  test_pos <- rbinom(n, 1, ifelse(ref_pos == 1, sens_true, 1 - sens_true))
+  test_pos <- rbinom(n, 1, ifelse(ref_pos == 1, sens_true, 1 - spec_true))
   dat <- data.frame(id, ref_pos, test_pos, stage)
-  
+
   return(dat)
-  
+
 }
