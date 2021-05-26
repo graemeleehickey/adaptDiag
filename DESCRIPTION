@@ -1,0 +1,28 @@
+Package: adaptDiag
+Type: Package
+Title: Bayesian Adaptive Designs for Diagnostic Trials
+Version: 0.1.0
+Authors@R: c(
+    person("Graeme L.", "Hickey",
+           email = "graemeleehickey@gmail.com", 
+           role = c("cre", "aut")),
+    person("Yongqiang", "Zhang",
+           email = "yongqiang.zhang@bd.com", 
+           role = "aut"),
+    person(given = "Becton, Dickinson and Company",
+           role = "cph")
+    )
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: GPL-3
+Encoding: UTF-8
+URL: https://github.com/graemeleehickey/dapt
+BugReports: https://github.com/graemeleehickey/dapt/issues
+LazyData: true
+Depends:
+    R (>= 3.6.0)
+Imports:
+    extraDistr,
+    stats
+Language: en-US
+RoxygenNote: 7.1.1
