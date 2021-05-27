@@ -8,10 +8,10 @@
 #' @param k integer. The \eqn{k}-th look, with \eqn{eqn = 1} denoting the first
 #'   interim analysis.
 
-#' @inheritParams single_trial
+#' @inheritParams multi_trial
 #'
 #' @importFrom extraDistr rbbinom
-#' @importFrom stats pbeta
+#' @importFrom stats pbeta qbeta
 #'
 #' @return A vector with:
 #' - The trial stage (`stage`)

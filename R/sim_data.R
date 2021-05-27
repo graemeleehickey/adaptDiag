@@ -5,7 +5,7 @@
 #'   group-sequential design.
 #'
 #' @param n integer. Maximum sample size for the trial.
-#' @inheritParams single_trial
+#' @inheritParams multi_trial
 #'
 #' @importFrom stats rbinom
 #'

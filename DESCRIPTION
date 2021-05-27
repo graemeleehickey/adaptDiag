@@ -23,6 +23,8 @@ Depends:
     R (>= 3.6.0)
 Imports:
     extraDistr,
+    parallel,
+    pbmcapply,
     stats
 Language: en-US
 RoxygenNote: 7.1.1
