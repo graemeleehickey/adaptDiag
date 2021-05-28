@@ -17,9 +17,6 @@ single_trial <- function(
   n_mc
 ) {
 
-  # TODO: allow for NULL sens or spec (not both)
-  # TODO: simplify inputs for sens and spec
-
   n_stages <- length(n_at_looks)
 
   sim_dat <- simulate_data(n          = max(n_at_looks),

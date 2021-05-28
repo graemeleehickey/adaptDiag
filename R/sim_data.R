@@ -12,8 +12,8 @@
 #' @return Simulated data frame with columns for:
 #'
 #' - Subject ID
-#' - Reference test outcome (`1 =` positive, `0 =` negative)
-#' - Diagnostic test outcome (`1 =` positive, `0 =` negative)
+#' - Reference test outcome (\code{1 =} positive, \code{0 =} negative)
+#' - Diagnostic test outcome (\code{1 =} positive, \code{0 =} negative)
 #' - Stage of the adaptive analysis (integer)
 #'
 #' @noRd

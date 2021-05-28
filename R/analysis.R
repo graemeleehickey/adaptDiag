@@ -13,17 +13,6 @@
 #' @importFrom extraDistr rbbinom
 #' @importFrom stats pbeta qbeta
 #'
-#' @return A vector with:
-#' - The trial stage (`stage`)
-#' - The posterior probability of exceeding the performance goal for
-#'   sensitivity (`pp_sens`)
-#' - The posterior probability of exceeding the performance goal for
-#'   specificity (`pp_spec`)
-#' - The true positive count (`tp`)
-#' - The true negative count (`tn`)
-#' - The false positive count (`fp`)
-#' - The false negative count (`fn`)
-#'
 #' @noRd
 analysis <- function(data, k,
                      sens_pg, spec_pg,

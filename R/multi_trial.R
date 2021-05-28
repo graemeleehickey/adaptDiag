@@ -10,12 +10,13 @@
 #' @param prev_true scalar. True assumed prevalence as measured by the
 #'   gold-standard reference test (must be between 0 and 1).
 #' @param endpoint character. The endpoint(s) that must meet a performance goal
-#'   criterion. The default is `code = "both"`, which means that the endpoint is
-#'   based simultaneously on sensitivity and specificity. Alternative options
-#'   are to specify `code = "sens"` or `code = "spec"` for sensitivity and
-#'   specificity, respectively. If only a single endpoint is selected (e.g.
-#'   sensitivity), then the PG and success probability threshold of the other
-#'   statistic are set to 1, and ignored for later analysis.
+#'   criterion. The default is \code{code = "both"}, which means that the
+#'   endpoint is based simultaneously on sensitivity and specificity.
+#'   Alternative options are to specify \code{code = "sens"} or \code{code =
+#'   "spec"} for sensitivity and specificity, respectively. If only a single
+#'   endpoint is selected (e.g. sensitivity), then the PG and success
+#'   probability threshold of the other statistic are set to 1, and ignored for
+#'   later analysis.
 #' @param sens_pg scalar. Performance goal (PG) for the sensitivity endpoint,
 #'   such that the the posterior probability that the PG is exceeded is
 #'   calculated. Must be between 0 and 1.
@@ -32,7 +33,6 @@
 #'   in order to declare a success. Must be between 0 and 1.
 #' @param succ_spec scalar. Probability threshold for the specificity to exceed
 #'   in order to declare a success. Must be between 0 and 1.
-#' @param fut TBA
 #' @param n_at_looks vector. Sample sizes for each interim look. The final value
 #'   (or only value if no interim looks are planned) is the maximum allowable
 #'   sample size for the trial.
@@ -46,26 +46,124 @@
 #'
 #' @details
 #'
-#' @section Simulation routine:
+#' This function simulates multiple trials and analyses each stage of the trial
+#' (i.e. at each interim analysis sample size look) irrespective of whether a
+#' stopping rule was triggered or not. The operating characteristics are handled
+#' by a separate function, which accounts for the stopping rules and any other
+#' trial constraints. By enumerating each stage of the trial, additional
+#' insights can be gained such as: for a trial that stopped early for futility,
+#' what is the probability that it would eventually go on to be successful if
+#' the trial had not stopped. The details on how each trial are simulated here
+#' are described below.
 #'
-#' TBA
+#' \strong{Simulating a single trial}
+#'
+#' Given true values for the test sensitivity (\code{sens_true}), specificity
+#' (\code{spec_true}), and the prevalence (\code{prev_true}) of disease, along
+#' with a sample size look strategy (\code{n_at_looks}), it is straightforward
+#' to simulate a complete dataset using the binomial distribution. That is, a
+#' data frame with true disease status (reference test), and the new diagnostic
+#' test result.
+#'
+#' \strong{Posterior probability of exceeding PG at current look}
+#'
+#' At a given sample size look, the posterior probability of an endpoint (e.g.
+#' sensitivity) exceeding the pre-specified PG (\code{sens_pg}) can be
+#' calculated as follows.
+#'
+#' If we let \eqn{\theta} be the test property of interest (e.g. sensitivity),
+#' and if we assume a prior distribution of the form
+#'
+#' \deqn{\theta ~ Beta(\alpha, \beta),}
+#'
+#' then with \eqn{X | \theta \sim Bin(n, \theta)}, where \eqn{X} is the number
+#' of new test positive cases from the reference positive cases, the posterior
+#' distribution of \eqn{\theta} is
+#'
+#' \deqn{\theta | X=x ~ Beta(\alpha + x, \beta + n - x).}
+#'
+#' The posterior probability of exceeding the PG is then calculated as
+#'
+#' \eqn{P[\theta \ge sens_pg | X = x, n]}.
+#'
+#' A similar calculation can be performed for the specificity, with
+#' corresponding PG, \code{spec_pg}.
+#'
+#' \strong{Posterior predictive probability of eventual success}
+#'
+#' When at an interim sample size that is less the maximum
+#' (i.e. \code{max(n_at_looks)}), we can calculate the probability that the trial
+#' will go on to eventually meet the success criteria.
+#'
+#' At the \eqn{j}-th look, we have observed \eqn{n_j} tests, with \eqn{n_j^* =
+#' n_{max} - n_j} subjects yet to be enrolled for testing. For the \eqn{n_j^*}
+#' subjects remaining, we can simulate the number of reference positive results,
+#' \eqn{y_j^*}, using the posterior predictive distribution for the prevalence
+#' (reference positive tests), which is off the form
+#'
+#' \deqn{y_j^* | y_j, n_j, n_j^* ~ Beta-Bin(n_j^*, \alpha_0 + y_j, \beta + n_j - y_j),}
+#'
+#' where \eqn{y_j} is the observed number of reference positive cases.
+#' Conditional on the number of subjects with a positive reference test in the
+#' remaining sample together with \eqn{n_j^*}, one can simulate the complete 2x2
+#' contingency table by using the posterior predictive distributions for
+#' sensitivity and specificity, each of which has a Beta-Binomial form.
+#' Combining the observed \eqn{n_j} subjects' data with a sample of the
+#' \eqn{n_j^*} subjects' data drawn from the predictive distribution, one can
+#' then calculate the posterior probability of trial success (exceeding a PG)
+#' for a specific endpoint. Repeating this many times and calculating the
+#' proportion of probabilities that exceed the probability success threshold
+#' yields the probability of eventual trial success at the maximum sample size.
+#'
+#' As well as calculating the predictive posterior probability of eventual
+#' success for sensitivity and specificity, separately, we can also calculate
+#' the probability for both endpoints simultaneously.
 #'
 #' @section Parallelization:
-#' To use will multiple cores (where available), the argument \code{ncores}
-#'   can be increased from the default of 1. Note: on Windows machines, it is
-#'   not possible to use the \code{\link[parallel]{mclapply}} function with
-#'   \code{ncores} \eqn{>1}.
 #'
-#' @return A vector with:
-#' - The trial stage (`stage`)
-#' - The posterior probability of exceeding the performance goal for
-#'   sensitivity (`pp_sens`)
-#' - The posterior probability of exceeding the performance goal for
-#'   specificity (`pp_spec`)
-#' - The true positive count (`tp`)
-#' - The true negative count (`tn`)
-#' - The false positive count (`fp`)
-#' - The false negative count (`fn`)
+#' To use multiple cores (where available), the argument \code{ncores} can be
+#' increased from the default of 1. Note: on Windows machines, it is not
+#' possible to use the \code{\link[parallel]{mclapply}} function with
+#' \code{ncores} \eqn{>1}.
+#'
+#' @return A data frame with rows for each stage of the trial (i.e. each sample
+#'   size look), irrespective of whether the trial meets the stopping criteria.
+#'   Multiple trial simulations are stacked longways and indicated by the
+#'   `trial` column. The data frame has the following columns:
+#'
+#' \itemize{
+#'     \item{\code{stage}:} Trial stage.
+#'     \item{\code{pp_sens}:} Posterior probability of exceeding the performance
+#'     goal for sensitivity.
+#'     \item{\code{pp_spec}:} Posterior probability of exceeding the performance
+#'     goal for specificity.
+#'     \item{\code{ppp_succ_sens}:} Posterior predictive probability of eventual
+#'     success for sensitivity at the maximum sample size.
+#'     \item{\code{ppp_succ_spec}:} Posterior predictive probability of eventual
+#'     success for specificity at the maximum sample size.
+#'     \item{\code{ppp_succ_both}:} Posterior predictive probability of eventual
+#'     success for *both* sensitivity and specificity at the maximum sample
+#'     size.
+#'     \item{\code{tp}:} True positive count.
+#'     \item{\code{tn}:} True negative count.
+#'     \item{\code{fp}:} False positive count.
+#'     \item{\code{fn}:} False negative count.
+#'     \item{\code{sens_hat}:} Posterior median estimate of the test
+#'     sensitivity.
+#'     \item{\code{sens_CrI2.5}:} Lower bound of the 95% credible interval of
+#'     the test sensitivity.
+#'     \item{\code{sens_CrI97.5}:} Upper bound of the 95% credible interval of
+#'     the test sensitivity.
+#'     \item{\code{spec_hat}:} Posterior median estimate of the test
+#'     specificity.
+#'     \item{\code{spec_CrI2.5}:} Lower bound of the 95% credible interval of
+#'     the test specificity.
+#'     \item{\code{spec_CrI97.5}:} Upper bound of the 95% credible interval of
+#'     the test specificity.
+#'     \item{\code{n}:} The sample size at the given look for the row.
+#'     \item{\code{trial}:} The trial number, which will range from 1 to
+#'     `n_trials`.
+#' }
 #'
 #' @examples
 #'
@@ -81,9 +179,7 @@
 #'   prior_prev = c(1, 1),
 #'   succ_sens = 0.95,
 #'   succ_spec = 0.95,
-#'   fut = 0.05,
 #'   n_at_looks = c(200, 400, 600, 800, 1000),
-#'   min_pos = 1,
 #'   n_mc = 10000,
 #'   n_trials = 2,
 #'   ncores = 1
@@ -105,9 +201,7 @@ multi_trial <- function(
   prior_prev = c(0.1, 0.1),
   succ_sens = 0.95,
   succ_spec = 0.95,
-  fut = 0.05,
   n_at_looks,
-  min_pos = 1,
   n_mc = 10000,
   n_trials = 1000,
   ncores
@@ -166,10 +260,10 @@ multi_trial <- function(
     stop("endpoint should be either 'both', 'sens', or 'spec'")
   }
 
-  # Check: futility bound
-  if (is.null(fut) | missing(fut) | is.na(fut)) {
-    fut <- 1 # never stop for futility
-  }
+  ## Check: futility bound
+  #if (is.null(fut) | missing(fut) | is.na(fut)) {
+  #  fut <- 1 # never stop for futility
+  #}
 
   # Check: true values specified
   if (missing(sens_true) | missing(spec_true) | missing(prev_true)) {
