@@ -2,3 +2,6 @@
 ^\.Rproj\.user$
 LICENSE
 \.gitconfig
+^README\.Rmd$
+^appveyor\.yml$
+^\.github$
