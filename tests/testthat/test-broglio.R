@@ -3,7 +3,7 @@ test_that("match broglio", {
   skip_on_cran()
   skip_on_ci()
   skip_on_covr()
-  skip()
+  skip("Too long to run")
 
   library(VGAM)
 
