@@ -12,12 +12,13 @@ Authors@R: c(
     person(given = "Becton, Dickinson and Company",
            role = "cph")
     )
-Description: More about what it does (maybe more than one line)
-    Use four spaces when indenting paragraphs within the Description. Test.
+Description: Simulate clinical trials for diagnostic test devices and evaluate 
+    the operating characteristics under an adaptive design with futility
+    assessment determined via the posterior predictive probabilities.
 License: GPL-3
 Encoding: UTF-8
-URL: https://github.com/graemeleehickey/dapt
-BugReports: https://github.com/graemeleehickey/dapt/issues
+URL: https://github.com/graemeleehickey/adaptDiag
+BugReports: https://github.com/graemeleehickey/adaptDiag/issues
 LazyData: true
 Depends:
     R (>= 3.6.0)
