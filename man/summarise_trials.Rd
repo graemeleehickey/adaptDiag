@@ -23,9 +23,14 @@ A data frame of row length 1, with the following columns:
 
 \itemize{
     \item{\code{power}:} Power is defined as the proportion of trials that
-    result in success, irrespective of whether it is an early stop of success
-    or not. When the performance goals are set equal to the respective true
-    values, the power returned is the type I error.
+    result in success, irrespective of whether it is an early stop for
+    success or not. Trials that stop for futility, but which subsequently go
+    on to be successful, are not considered as a success. In other words, the
+    futility decision is binding, and in practice, if a trial triggered a
+    futility rule, the sponsor would not see the eventual outcome if the
+    trial were to continue enrolling. When the performance goals are set
+    equal to the respective true values, the power returned is the type I
+    error.
     \item{\code{stop_futility}:} The proportion of trials that stopped early
     for expected futility.
     \item{\code{n_avg}:} The average sample size for trials at the stage they
