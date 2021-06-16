@@ -38,7 +38,7 @@ endpoint <- "both"
 
 The thresholds of 0.985 were reported as being chosen to control the overall type I error at <5%. In general, when there are interim looks at the data, a type I error penalty must be paid. The choice of thresholds can be determined using simulation (in the null model space) at multiple sequential thresholds, and identify which threshold(s) lead to type I error below the required value.
 
-There study did not specify what the assumed sensitivity, specificity, or true prevalence was. From the pilot (beta) study reported by Julian et al. (2008), we assume that the true values are:
+Their study did not specify what the assumed sensitivity, specificity, or true prevalence was. From the pilot (beta) study reported by Julian et al. (2008), we assume that the true values are:
 
 ```{r param_true, eval=FALSE}
 sens_true <- 0.824
