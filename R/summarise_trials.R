@@ -58,8 +58,7 @@
 summarise_trials <- function(data, min_pos = 1, fut = 0) {
 
   sims <- data$sims
-  call <- data$call
-  args <- as.list(call)
+  args <- data$args
   args$fut <- fut
   args$min_pos <- min_pos
 
@@ -133,7 +132,7 @@ evaluate_trial <- function(x, args) {
     }
     if (args$endpoint == "both") {
       if ((x$pp_sens[i] >= args$succ_sens) & (x$pp_spec[i] >= args$succ_spec)) {
-        decision <- ifelse(i > 0 & i < n_looks, "early win", "late win")
+        decision <- ifelse(i < n_looks, "early win", "late win")
         break
       } else if ((x$ppp_succ_both[i] < args$fut) & (i < n_looks)) {
         decision <- "stop for futility"
@@ -143,7 +142,7 @@ evaluate_trial <- function(x, args) {
       }
     } else if (args$endpoint == "sens") {
       if (x$pp_sens[i] >= args$succ_sens) {
-        decision <- ifelse(i > 0 & i < n_looks, "early win", "late win")
+        decision <- ifelse(i < n_looks, "early win", "late win")
         break
       } else if ((x$ppp_succ_sens[i] < args$fut) & (i < n_looks)) {
         decision <- "stop for futility"
@@ -153,7 +152,7 @@ evaluate_trial <- function(x, args) {
       }
     } else {
       if (x$pp_spec[i] >= args$succ_spec) {
-        decision <- ifelse(i > 0 & i < n_looks, "early win", "late win")
+        decision <- ifelse(i < n_looks, "early win", "late win")
         break
       } else if ((x$ppp_succ_spec[i] < args$fut) & (i < n_looks)) {
         decision <- "stop for futility"

@@ -77,10 +77,10 @@ which will be used to evaluate the operating characteristics.}
 (spare 1).}
 }
 \value{
-A data frame with rows for each stage of the trial (i.e. each sample
-  size look), irrespective of whether the trial meets the stopping criteria.
-  Multiple trial simulations are stacked longways and indicated by the
-  `trial` column. The data frame has the following columns:
+A list containing a data frame with rows for each stage of the trial
+  (i.e. each sample size look), irrespective of whether the trial meets the
+  stopping criteria. Multiple trial simulations are stacked longways and
+  indicated by the `trial` column. The data frame has the following columns:
 
 \itemize{
     \item{\code{stage}:} Trial stage.
@@ -115,6 +115,8 @@ A data frame with rows for each stage of the trial (i.e. each sample
     \item{\code{trial}:} The trial number, which will range from 1 to
     `n_trials`.
 }
+
+The list also contains the arguments used and the call.
 }
 \description{
 Multiple trials and simulated and analysed up to the final

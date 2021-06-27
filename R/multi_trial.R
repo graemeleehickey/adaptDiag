@@ -126,10 +126,10 @@
 #' possible to use the \code{\link[parallel]{mclapply}} function with
 #' \code{ncores} \eqn{>1}.
 #'
-#' @return A data frame with rows for each stage of the trial (i.e. each sample
-#'   size look), irrespective of whether the trial meets the stopping criteria.
-#'   Multiple trial simulations are stacked longways and indicated by the
-#'   `trial` column. The data frame has the following columns:
+#' @return A list containing a data frame with rows for each stage of the trial
+#'   (i.e. each sample size look), irrespective of whether the trial meets the
+#'   stopping criteria. Multiple trial simulations are stacked longways and
+#'   indicated by the `trial` column. The data frame has the following columns:
 #'
 #' \itemize{
 #'     \item{\code{stage}:} Trial stage.
@@ -164,6 +164,8 @@
 #'     \item{\code{trial}:} The trial number, which will range from 1 to
 #'     `n_trials`.
 #' }
+#'
+#' The list also contains the arguments used and the call.
 #'
 #' @examples
 #'
@@ -243,9 +245,9 @@ multi_trial <- function(
     }
     if (!is.null(spec_pg)) {
       warning("spec_pg is being ignored")
-      spec_pg <- 1 # can never exceed this
-      succ_spec <- 1 # can never exceed this
     }
+    spec_pg <- 1   # can never exceed this
+    succ_spec <- 1 # can never exceed this
   } else if (endpoint == "spec") {
     # Specificity only
     if (is.null(spec_pg) | missing(spec_pg) | is.na(spec_pg)) {
@@ -253,17 +255,12 @@ multi_trial <- function(
     }
     if (!is.null(sens_pg)) {
       warning("sens_pg is being ignored")
-      sens_pg <- 1 # can never exceed this
-      succ_sens <- 1 # can never exceed this
     }
+    sens_pg <- 1   # can never exceed this
+    succ_sens <- 1 # can never exceed this
   } else {
     stop("endpoint should be either 'both', 'sens', or 'spec'")
   }
-
-  ## Check: futility bound
-  #if (is.null(fut) | missing(fut) | is.na(fut)) {
-  #  fut <- 1 # never stop for futility
-  #}
 
   # Check: true values specified
   if (missing(sens_true) | missing(spec_true) | missing(prev_true)) {
@@ -296,7 +293,23 @@ multi_trial <- function(
 
   sims <- do.call("rbind", sims)
   sims$trial <- rep(1:n_trials, each = length(n_at_looks))
-  out <- list(sims = sims, call = Call)
+
+  args <- list("sens_true"  = sens_true,
+               "spec_true"  = spec_true,
+               "prev_true"  = prev_true,
+               "endpoint"   = endpoint,
+               "sens_pg"    = sens_pg,
+               "spec_pg"    = spec_pg,
+               "prior_sens" = prior_sens,
+               "prior_spec" = prior_spec,
+               "prior_prev" = prior_prev,
+               "succ_sens"  = succ_sens,
+               "succ_spec"  = succ_spec,
+               "n_at_looks" = n_at_looks,
+               "n_mc"       = n_mc,
+               "n_trials"   = n_trials)
+
+  out <- list(sims = sims, call = Call, args = args)
 
   invisible(out)
 
