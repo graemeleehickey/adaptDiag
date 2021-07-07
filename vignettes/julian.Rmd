@@ -85,7 +85,7 @@ fit_power <- multi_trial(
   n_at_looks = seq(200, 700, 50),
   n_mc = 10000,
   n_trials = 200,
-  ncores = 2L)
+  ncores = 1L)
 ```
 
 Here, we have only simulated 200 trials here, using a total of 2 cores. In general, `n_trials` should be larger, and `ncores` should be set as large as possible dependent on the machine being used to perform the calculations. The Monte Carlo integration performed for futility assessment is based on `n_mc = 10000` draws.
@@ -137,7 +137,7 @@ for (i in 1:length(prev_true_vec)) {
   n_at_looks = seq(200, 700, 50),
   n_mc = 1000,
   n_trials = 100,
-  ncores = 2L)
+  ncores = 1L)
   
   out <- summarise_trials(fit_power_i, min_pos = 30, fut = 0.05)
   tab <- rbind(tab, out)
