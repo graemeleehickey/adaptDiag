@@ -19,7 +19,7 @@ decisions can be made at interim analyses to either stop the trial for
 early success, stop the trial for expected futility, or continue to the
 next sample size look. Designs can be focused around test sensitivity,
 specificity, or both. The package is heavily influenced by the seminal
-article Broglio et al. (2014).
+article by Broglio et al. (2014).
 
 ## References
 
