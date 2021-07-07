@@ -8,6 +8,8 @@
 [![CRAN
 status](https://www.r-pkg.org/badges/version/adaptDiag)](https://CRAN.R-project.org/package=adaptDiag)
 [![R-CMD-check](https://github.com/graemeleehickey/adaptDiag/workflows/R-CMD-check/badge.svg)](https://github.com/graemeleehickey/adaptDiag/actions)
+[![Codecov test
+coverage](https://codecov.io/gh/graemeleehickey/adaptDiag/branch/main/graph/badge.svg)](https://codecov.io/gh/graemeleehickey/adaptDiag?branch=main)
 <!-- badges: end -->
 
 The goal of `adaptDiag` is to simplify the process of designing adaptive
@@ -16,7 +18,8 @@ trial of a new diagnostic test compared to a gold-standard reference,
 decisions can be made at interim analyses to either stop the trial for
 early success, stop the trial for expected futility, or continue to the
 next sample size look. Designs can be focused around test sensitivity,
-specificity, or both.
+specificity, or both. The package is heavily influenced by the seminal
+article Broglio et al. (2014).
 
 ## References
 

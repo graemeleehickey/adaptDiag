@@ -6,3 +6,4 @@ LICENSE
 ^appveyor\.yml$
 ^\.github$
 data-raw
+^codecov\.yml$
