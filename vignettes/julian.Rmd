@@ -88,7 +88,7 @@ fit_power <- multi_trial(
   ncores = 1L)
 ```
 
-Here, we have only simulated 200 trials here, using a total of 2 cores. In general, `n_trials` should be larger, and `ncores` should be set as large as possible dependent on the machine being used to perform the calculations. The Monte Carlo integration performed for futility assessment is based on `n_mc = 10000` draws.
+Here, we have only simulated 200 trials here, using a total of 1 core. In general, `n_trials` should be larger, and `ncores` should be set as large as possible dependent on the machine being used to perform the calculations. The Monte Carlo integration performed for futility assessment is based on `n_mc = 10000` draws.
 
 To determine the operating characteristics, we need to also specify the futility stopping rule. That is, we wish to calculate the posterior predictive probability of eventual trial success at the maximum sample size. Using conjugacy, the posterior predictive distribution of cases is Beta-Binomial (Broglio et al. 2014). For the GeneSearch BLN Assay study, the futility stopping rule was set at 5% -- that is, if the posterior predictive probability of eventual study success is <0.05, the study will terminate early.
 
