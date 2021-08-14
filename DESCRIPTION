@@ -23,7 +23,9 @@ LazyData: true
 Depends:
     R (>= 3.6.0)
 Imports:
+    doParallel,
     extraDistr,
+    foreach,
     parallel,
     pbmcapply,
     stats

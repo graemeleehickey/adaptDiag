@@ -29,16 +29,16 @@ single_trial <- function(
   for (k in 1:length(n_at_looks)) {
 
     trial <- analysis(data = sim_dat,
-                      k = k,
-                      sens_pg = sens_pg,
-                      spec_pg = spec_pg,
+                      k          = k,
+                      sens_pg    = sens_pg,
+                      spec_pg    = spec_pg,
                       prior_sens = prior_sens,
                       prior_spec = prior_spec,
                       prior_prev = prior_prev,
-                      succ_sens = succ_sens,
-                      succ_spec = succ_spec,
+                      succ_sens  = succ_sens,
+                      succ_spec  = succ_spec,
                       n_at_looks = n_at_looks,
-                      n_mc = n_mc)
+                      n_mc       = n_mc)
 
     out <- rbind(out, trial)
 

@@ -189,6 +189,8 @@
 #'
 #' @importFrom parallel detectCores
 #' @importFrom pbmcapply pbmclapply
+#' @importFrom doParallel registerDoParallel
+#' @importFrom foreach foreach registerDoSEQ '%dopar%'
 #'
 #' @export
 multi_trial <- function(
@@ -289,10 +291,23 @@ multi_trial <- function(
       n_mc       = n_mc)
   }
 
-  sims <- pbmclapply(1:n_trials, single_trial_wrapper, mc.cores = ncores)
+  if (.Platform$OS.type == "Windows") {
+    # Windows systems
+    doParallel::registerDoParallel(cores = ncores)
+    sims <- foreach(x = 1:n_trials, .packages = 'adaptDiag') %dopar% {
+      int <- single_trial_wrapper()
+      return(int)
+    }
+    registerDoSEQ()
+  } else {
+    # *nix systems
+    sims <- pbmclapply(X = 1:n_trials,
+                       FUN = single_trial_wrapper,
+                       mc.cores = ncores)
 
-  sims <- do.call("rbind", sims)
-  sims$trial <- rep(1:n_trials, each = length(n_at_looks))
+    sims <- do.call("rbind", sims)
+    sims$trial <- rep(1:n_trials, each = length(n_at_looks))
+  }
 
   args <- list("sens_true"  = sens_true,
                "spec_true"  = spec_true,
@@ -309,7 +324,9 @@ multi_trial <- function(
                "n_mc"       = n_mc,
                "n_trials"   = n_trials)
 
-  out <- list(sims = sims, call = Call, args = args)
+  out <- list(sims = sims,
+              call = Call,
+              args = args)
 
   invisible(out)
 
