@@ -14,7 +14,7 @@ test_that("both test works", {
     n_at_looks = c(200, 400, 600, 800, 1000),
     n_mc = 10000,
     n_trials = 20,
-    ncores = 1
+    ncores = 2L
   )
 
   result <- summarise_trials(data, fut = 0.05)
