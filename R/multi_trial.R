@@ -288,12 +288,17 @@ multi_trial <- function(
 
   if (.Platform$OS.type == "windows") {
     # Windows systems
-    doParallel::registerDoParallel(cores = ncores)
-    sims <- foreach(x = 1:n_trials, .packages = 'adaptDiag',
-                    .combine = rbind) %dopar% {
-      single_trial_wrapper()
+    if (ncores == 1L) {
+      sims <- lapply(X = 1:n_trials,
+                     FUN = single_trial_wrapper)
+    } else {
+      doParallel::registerDoParallel(cores = ncores)
+      sims <- foreach(x = 1:n_trials, .packages = 'adaptDiag',
+                      .combine = rbind) %dopar% {
+                        single_trial_wrapper()
+                      }
+      registerDoSEQ()
     }
-    registerDoSEQ()
   } else {
     # *nix systems
     sims <- pbmclapply(X = 1:n_trials,
