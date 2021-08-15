@@ -286,7 +286,7 @@ multi_trial <- function(
       n_mc       = n_mc)
   }
 
-  if (.Platform$OS.type == "Windows") {
+  if (.Platform$OS.type == "windows") {
     # Windows systems
     doParallel::registerDoParallel(cores = ncores)
     sims <- foreach(x = 1:n_trials, .packages = 'adaptDiag',
