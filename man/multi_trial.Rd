@@ -202,9 +202,10 @@ the probability for both endpoints simultaneously.
 
 
 To use multiple cores (where available), the argument \code{ncores} can be
-increased from the default of 1. Note: on Windows machines, it is not
-possible to use the \code{\link[parallel]{mclapply}} function with
-\code{ncores} \eqn{>1}.
+increased from the default of 1. On UNIX machines (including macOS),
+parallelization is performed using the \code{\link[parallel]{mclapply}}
+function with \code{ncores} \eqn{>1}. On Windows machines, parallel
+processing is implemented via the \code{\link[foreach]{foreach}} function.
 }
 
 \examples{

@@ -122,9 +122,10 @@
 #' @section Parallelization:
 #'
 #' To use multiple cores (where available), the argument \code{ncores} can be
-#' increased from the default of 1. Note: on Windows machines, it is not
-#' possible to use the \code{\link[parallel]{mclapply}} function with
-#' \code{ncores} \eqn{>1}.
+#' increased from the default of 1. On UNIX machines (including macOS),
+#' parallelization is performed using the \code{\link[parallel]{mclapply}}
+#' function with \code{ncores} \eqn{>1}. On Windows machines, parallel
+#' processing is implemented via the \code{\link[foreach]{foreach}} function.
 #'
 #' @return A list containing a data frame with rows for each stage of the trial
 #'   (i.e. each sample size look), irrespective of whether the trial meets the
@@ -223,12 +224,6 @@ multi_trial <- function(
     warning("Must use at least 1 core... setting ncores = 1")
   }
 
-  # Check: if Windows and if ncores = 1
-  if (.Platform$OS.type == "Windows" & ncores > 1L) {
-    message("On Windows machines it is required that ncores = 1L")
-    ncores <- 1
-  }
-
   # Check: endpoint selection
   if (endpoint == "both") {
     # Both
@@ -294,9 +289,9 @@ multi_trial <- function(
   if (.Platform$OS.type == "Windows") {
     # Windows systems
     doParallel::registerDoParallel(cores = ncores)
-    sims <- foreach(x = 1:n_trials, .packages = 'adaptDiag') %dopar% {
-      int <- single_trial_wrapper()
-      return(int)
+    sims <- foreach(x = 1:n_trials, .packages = 'adaptDiag',
+                    .combine = rbind) %dopar% {
+      single_trial_wrapper()
     }
     registerDoSEQ()
   } else {
@@ -306,8 +301,9 @@ multi_trial <- function(
                        mc.cores = ncores)
 
     sims <- do.call("rbind", sims)
-    sims$trial <- rep(1:n_trials, each = length(n_at_looks))
   }
+
+  sims$trial <- rep(1:n_trials, each = length(n_at_looks))
 
   args <- list("sens_true"  = sens_true,
                "spec_true"  = spec_true,
