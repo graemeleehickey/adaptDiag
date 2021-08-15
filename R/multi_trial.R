@@ -293,7 +293,7 @@ multi_trial <- function(
                      FUN = single_trial_wrapper)
     } else {
       doParallel::registerDoParallel(cores = ncores)
-      sims <- foreach(x = 1:n_trials,
+      sims <- foreach(x = 1:n_trials, .packages = 'adaptDiag',
                       .combine = rbind) %dopar% {
                         single_trial_wrapper()
                       }
