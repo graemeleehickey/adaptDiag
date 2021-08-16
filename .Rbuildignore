@@ -7,3 +7,4 @@ LICENSE
 ^\.github$
 data-raw
 ^codecov\.yml$
+^cran-comments\.md$
