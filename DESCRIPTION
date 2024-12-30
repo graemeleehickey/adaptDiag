@@ -1,7 +1,7 @@
 Package: adaptDiag
 Type: Package
 Title: Bayesian Adaptive Designs for Diagnostic Trials
-Version: 0.1.0
+Version: 0.1.1-9000
 Authors@R: c(
     person("Graeme L.", "Hickey",
            email = "graemeleehickey@gmail.com", 
@@ -29,7 +29,7 @@ Imports:
     pbmcapply,
     stats
 Language: en-US
-RoxygenNote: 7.1.1
+RoxygenNote: 7.3.2
 Suggests: 
     rmarkdown,
     knitr,

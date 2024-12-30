@@ -7,9 +7,9 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/adaptDiag)](https://CRAN.R-project.org/package=adaptDiag)
-[![R-CMD-check](https://github.com/graemeleehickey/adaptDiag/workflows/R-CMD-check/badge.svg)](https://github.com/graemeleehickey/adaptDiag/actions)
 [![Codecov test
-coverage](https://codecov.io/gh/graemeleehickey/adaptDiag/branch/main/graph/badge.svg)](https://codecov.io/gh/graemeleehickey/adaptDiag?branch=main)
+coverage](https://codecov.io/gh/graemeleehickey/adaptDiag/graph/badge.svg)](https://app.codecov.io/gh/graemeleehickey/adaptDiag)
+[![R-CMD-check](https://github.com/graemeleehickey/adaptDiag/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/graemeleehickey/adaptDiag/actions/workflows/R-CMD-check.yaml)
 <!-- badges: end -->
 
 The goal of `adaptDiag` is to simplify the process of designing adaptive
