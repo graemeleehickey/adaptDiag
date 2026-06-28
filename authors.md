@@ -11,7 +11,7 @@
 ## Citation
 
 Source:
-[`DESCRIPTION`](https://github.com/graemeleehickey/adaptDiag/blob/main/DESCRIPTION)
+[`DESCRIPTION`](https://github.com/graemeleehickey/adaptDiag/blob/v0.1.1/DESCRIPTION)
 
 Hickey G, Zhang Y (2026). *adaptDiag: Bayesian Adaptive Designs for
 Diagnostic Trials*. R package version 0.1.1,
