@@ -195,6 +195,7 @@
 #' @importFrom foreach foreach registerDoSEQ '%dopar%'
 #'
 #' @export
+utils::globalVariables("x")
 multi_trial <- function(
   sens_true,
   spec_true,

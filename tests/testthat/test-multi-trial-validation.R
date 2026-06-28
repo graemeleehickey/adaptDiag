@@ -74,7 +74,7 @@ test_that("multi_trial errors when prior arguments are NULL", {
 })
 
 test_that("multi_trial warns and corrects when ncores < 1", {
-  expect_snapshot(
+  expect_warning(
     multi_trial(
       sens_true = 0.9, spec_true = 0.95, prev_true = 0.1,
       endpoint = "both",
@@ -82,7 +82,8 @@ test_that("multi_trial warns and corrects when ncores < 1", {
       prior_sens = c(1, 1), prior_spec = c(1, 1), prior_prev = c(1, 1),
       succ_sens = 0.95, succ_spec = 0.95,
       n_at_looks = c(500), n_mc = 100, n_trials = 2, ncores = 0
-    )
+    ),
+    "Must use at least 1 core"
   )
 })
 
@@ -93,7 +94,7 @@ test_that("multi_trial uses ncores default when missing", {
     sens_pg = 0.8, spec_pg = 0.8,
     prior_sens = c(1, 1), prior_spec = c(1, 1), prior_prev = c(1, 1),
     succ_sens = 0.95, succ_spec = 0.95,
-    n_at_looks = c(500), n_mc = 100, n_trials = 2
+    n_at_looks = c(500), n_mc = 100, n_trials = 2, ncores = 1
   )
   expect_type(result, "list")
   expect_named(result, c("sims", "call", "args"))

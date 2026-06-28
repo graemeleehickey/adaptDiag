@@ -61,6 +61,7 @@ test_that("spec endpoint futility stopping works", {
     spec_true = 0.81,
     prev_true = 0.5,
     endpoint = "spec",
+    sens_pg = NULL,
     spec_pg = 0.9,
     prior_sens = c(1, 1),
     prior_spec = c(1, 1),
