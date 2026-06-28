@@ -75,6 +75,7 @@ data <- multi_trial(
     n_trials = 20,
     ncores = 1
     )
+#> 
 
 summarise_trials(data, fut = 0.05, min_pos = 10)
 #>                    n

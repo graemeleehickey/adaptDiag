@@ -282,4 +282,5 @@ multi_trial(
 )
 #> Loading required package: foreach
 #> Loading required package: rngtools
+#> 
 ```
