@@ -122,18 +122,24 @@ calculated. Must be between 0 and 1.</p></dd>
 
 
 <dt id="arg-prior-sens">prior_sens<a class="anchor" aria-label="anchor" href="#arg-prior-sens"></a></dt>
-<dd><p>vector. A vector of length 2 with the prior shape
-parameters for the sensitivity Beta distribution.</p></dd>
+<dd><p>vector. A vector of length 2 specifying the shape
+parameters \((\alpha, \beta)\) of the Beta prior for sensitivity.
+<code>c(1, 1)</code> gives a uniform (non-informative) prior. <code>c(0.1, 0.1)</code>
+is a near-Jeffreys prior that is bimodal, placing most mass near 0 and 1;
+this can make the posterior sensitive to early data. An informative prior
+derived from a pilot study is recommended when available.</p></dd>
 
 
 <dt id="arg-prior-spec">prior_spec<a class="anchor" aria-label="anchor" href="#arg-prior-spec"></a></dt>
-<dd><p>vector. A vector of length 2 with the prior shape
-parameters for the specificity Beta distribution.</p></dd>
+<dd><p>vector. A vector of length 2 specifying the shape
+parameters \((\alpha, \beta)\) of the Beta prior for specificity. See
+<code>prior_sens</code> for guidance on prior choice.</p></dd>
 
 
 <dt id="arg-prior-prev">prior_prev<a class="anchor" aria-label="anchor" href="#arg-prior-prev"></a></dt>
-<dd><p>vector. A vector of length 2 with the prior shape
-parameters for the prevalence Beta distribution.</p></dd>
+<dd><p>vector. A vector of length 2 specifying the shape
+parameters \((\alpha, \beta)\) of the Beta prior for prevalence. See
+<code>prior_sens</code> for guidance on prior choice.</p></dd>
 
 
 <dt id="arg-succ-sens">succ_sens<a class="anchor" aria-label="anchor" href="#arg-succ-sens"></a></dt>

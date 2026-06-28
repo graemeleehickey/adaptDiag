@@ -68,18 +68,24 @@ multi_trial(
 
 - prior_sens:
 
-  vector. A vector of length 2 with the prior shape parameters for the
-  sensitivity Beta distribution.
+  vector. A vector of length 2 specifying the shape parameters
+  \\(\alpha, \beta)\\ of the Beta prior for sensitivity. `c(1, 1)` gives
+  a uniform (non-informative) prior. `c(0.1, 0.1)` is a near-Jeffreys
+  prior that is bimodal, placing most mass near 0 and 1; this can make
+  the posterior sensitive to early data. An informative prior derived
+  from a pilot study is recommended when available.
 
 - prior_spec:
 
-  vector. A vector of length 2 with the prior shape parameters for the
-  specificity Beta distribution.
+  vector. A vector of length 2 specifying the shape parameters
+  \\(\alpha, \beta)\\ of the Beta prior for specificity. See
+  `prior_sens` for guidance on prior choice.
 
 - prior_prev:
 
-  vector. A vector of length 2 with the prior shape parameters for the
-  prevalence Beta distribution.
+  vector. A vector of length 2 specifying the shape parameters
+  \\(\alpha, \beta)\\ of the Beta prior for prevalence. See `prior_sens`
+  for guidance on prior choice.
 
 - succ_sens:
 

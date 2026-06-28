@@ -2,8 +2,19 @@
 
 ## adaptDiag 0.1.2.9000
 
-- [`multi_trial()`](https://graemeleehickey.github.io/adaptDiag/reference/multi_trial.md)
-  gains a `seed` argument for reproducible simulations, addressing a
+- [`binom_sample_size()`](https://graemeleehickey.github.io/adaptDiag/reference/binom_sample_size.md):
+  fixed the normal approximation used to initialise the sample size
+  search. The previous formula used only in the variance term; the
+  correct Chow et al. (2017) formula uses . The exact discrete search
+  result is unchanged, but the approximation now matches the cited
+  reference.
+- [`multi_trial()`](https://graemeleehickey.github.io/adaptDiag/reference/multi_trial.md):
+  improved documentation for `prior_sens`, `prior_spec`, and
+  `prior_prev` to explain that `c(0.1, 0.1)` is a bimodal near-Jeffreys
+  prior that places most mass near 0 and 1, and that `c(1, 1)` (uniform)
+  or an informative prior from pilot data may be more appropriate.
+- [`multi_trial()`](https://graemeleehickey.github.io/adaptDiag/reference/multi_trial.md):
+  added a `seed` argument for reproducible simulations, addressing a
   user request in
   [\#5](https://github.com/graemeleehickey/adaptDiag/issues/5).
   Reproducibility is implemented via `doRNG::%dorng%`, which correctly
