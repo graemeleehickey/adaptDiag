@@ -98,13 +98,14 @@ satisfy the following posterior probability inequalities:</p>
 P[\pi_1 &gt; 0.70 | \text{Data}] \ge 0.985 \, \text{  and } P[\pi_0 &gt; 0.90 | \text{Data}] \ge 0.985.
 </annotation></semantics></math></p>
 <p>Based on this, we know that</p>
-<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>sens_pg <span class="ot">&lt;-</span> <span class="fl">0.7</span></span>
-<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>spec_pg <span class="ot">&lt;-</span> <span class="fl">0.9</span></span>
-<span id="cb2-3"><a href="#cb2-3" tabindex="-1"></a></span>
-<span id="cb2-4"><a href="#cb2-4" tabindex="-1"></a>succ_sens <span class="ot">&lt;-</span> <span class="fl">0.985</span>,</span>
-<span id="cb2-5"><a href="#cb2-5" tabindex="-1"></a>succ_spec <span class="ot">&lt;-</span> <span class="fl">0.985</span>,</span>
-<span id="cb2-6"><a href="#cb2-6" tabindex="-1"></a></span>
-<span id="cb2-7"><a href="#cb2-7" tabindex="-1"></a>endpoint <span class="ot">&lt;-</span> <span class="st">"both"</span></span></code></pre></div>
+<div class="sourceCode" id="cb2"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sens_pg</span> <span class="op">&lt;-</span> <span class="fl">0.7</span></span>
+<span><span class="va">spec_pg</span> <span class="op">&lt;-</span> <span class="fl">0.9</span></span>
+<span></span>
+<span><span class="va">succ_sens</span> <span class="op">&lt;-</span> <span class="fl">0.985</span></span>
+<span><span class="va">succ_spec</span> <span class="op">&lt;-</span> <span class="fl">0.985</span></span>
+<span></span>
+<span><span class="va">endpoint</span> <span class="op">&lt;-</span> <span class="st">"both"</span></span></code></pre></div>
 <p>The thresholds of 0.985 were reported as being chosen to control the
 overall type I error at &lt;5%. In general, when there are interim looks
 at the data, a type I error penalty must be paid. The choice of
@@ -147,9 +148,7 @@ Hence, we can set:</p>
 <code>adaptDiag</code> package function <code><a href="../reference/multi_trial.html">multi_trial()</a></code>
 function as follows:</p>
 <div class="sourceCode" id="cb6"><pre class="downlit sourceCode r">
-<code class="sourceCode R"><span><span class="kw"><a href="https://rdrr.io/r/base/library.html" class="external-link">library</a></span><span class="op">(</span><span class="va"><a href="https://graemeleehickey.github.io/adaptDiag">adaptDiag</a></span><span class="op">)</span></span>
-<span></span>
-<span><span class="va">fit_power</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/multi_trial.html">multi_trial</a></span><span class="op">(</span></span>
+<code class="sourceCode R"><span><span class="va">fit_power</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/multi_trial.html">multi_trial</a></span><span class="op">(</span></span>
 <span>  sens_true <span class="op">=</span> <span class="fl">0.824</span>,</span>
 <span>  spec_true <span class="op">=</span> <span class="fl">0.963</span>,</span>
 <span>  prev_true <span class="op">=</span> <span class="fl">0.20</span>,</span>
@@ -164,6 +163,7 @@ function as follows:</p>
 <span>  n_at_looks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">700</span>, <span class="fl">50</span><span class="op">)</span>,</span>
 <span>  n_mc <span class="op">=</span> <span class="fl">10000</span>,</span>
 <span>  n_trials <span class="op">=</span> <span class="fl">200</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">1234L</span>,</span>
 <span>  ncores <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span>
 <span><span class="co">#&gt; Loading required package: foreach</span></span>
 <span><span class="co">#&gt; Loading required package: rngtools</span></span></code></pre></div>
@@ -181,20 +181,19 @@ Beta-Binomial (Broglio et al. 2014). For the GeneSearch BLN Assay study,
 the futility stopping rule was set at 5% – that is, if the posterior
 predictive probability of eventual study success is &lt;0.05, the study
 will terminate early.</p>
-<p>We add in an additional criteria that the study cannot stop for early
-success or futilty until a fixed number of reference positive cases are
-observed. We implement these 2 criteria and extract the operating
-characteristic as follows:</p>
+<p>We add in an additional criterion that the study cannot stop for
+early success or futility until a fixed number of reference positive
+cases are observed. We implement these 2 criteria and extract the
+operating characteristic as follows:</p>
 <div class="sourceCode" id="cb7"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summarise_trials.html">summarise_trials</a></span><span class="op">(</span><span class="va">fit_power</span>, min_pos <span class="op">=</span> <span class="fl">30</span>, fut <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                    n</span></span>
 <span><span class="co">#&gt; decision            200 250 300 350 400 450 500 550 600 650 700</span></span>
-<span><span class="co">#&gt;   early win          71  21  27  22  10  14   8   2   2   6   0</span></span>
-<span><span class="co">#&gt;   late win            0   0   0   0   0   0   0   0   0   0   5</span></span>
-<span><span class="co">#&gt;   no stopping         0   0   0   0   0   0   0   0   0   0   3</span></span>
-<span><span class="co">#&gt;   stop for futility   1   0   2   0   1   1   0   0   1   3   0</span></span>
-<span><span class="co">#&gt;   power stop_futility  n_avg     sens      spec mean_pos</span></span>
-<span><span class="co">#&gt; 1  0.94         0.045 327.75 0.841612 0.9653305   65.665</span></span></code></pre></div>
+<span><span class="co">#&gt;   early win          62  28  21  23  16  10   9   6   5   4   0</span></span>
+<span><span class="co">#&gt;   late win            0   0   0   0   0   0   0   0   0   0   2</span></span>
+<span><span class="co">#&gt;   stop for futility   5   0   2   0   1   0   2   4   0   0   0</span></span>
+<span><span class="co">#&gt;   power stop_futility  n_avg      sens      spec mean_pos</span></span>
+<span><span class="co">#&gt; 1  0.93          0.07 323.25 0.8374433 0.9635257    64.43</span></span></code></pre></div>
 <p>The printed output shows a table with columns listing the sample size
 looks, and rows listing the reasons for the trial stopping. Below this
 table we also see estimates of the study power, average sample size,
@@ -209,10 +208,10 @@ calculate this by assuming the true values are equal to the null.</p>
 <span></span>
 <span><span class="fu"><a href="../reference/summarise_trials.html">summarise_trials</a></span><span class="op">(</span><span class="va">fit_type1</span>, min_pos <span class="op">=</span> <span class="fl">30</span>, fut <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                    n</span></span>
-<span><span class="co">#&gt; decision            200 250 300 350 400 550</span></span>
-<span><span class="co">#&gt;   stop for futility 160  17  14   5   2   2</span></span>
-<span><span class="co">#&gt;   power stop_futility n_avg      sens      spec mean_pos</span></span>
-<span><span class="co">#&gt; 1     0             1 220.5 0.6939263 0.8972075    44.07</span></span></code></pre></div>
+<span><span class="co">#&gt; decision            200 250 300 350 400 450 500 550</span></span>
+<span><span class="co">#&gt;   stop for futility 160  18  12   2   2   3   1   2</span></span>
+<span><span class="co">#&gt;   power stop_futility  n_avg      sens      spec mean_pos</span></span>
+<span><span class="co">#&gt; 1     0             1 222.75 0.6924178 0.8998399   44.405</span></span></code></pre></div>
 <p>The operating characteristics show the type I error is well
 controlled at the 5% level. <strong>Note</strong>: in practice, one
 should run many simulations (at least 10,000) to get accurate estimates
@@ -235,7 +234,7 @@ the <code><a href="../reference/multi_trial.html">multi_trial()</a></code> funct
 <div class="sourceCode" id="cb9"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">tab</span> <span class="op">&lt;-</span> <span class="cn">NULL</span></span>
 <span></span>
-<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="fu"><a href="https://rdrr.io/r/base/length.html" class="external-link">length</a></span><span class="op">(</span><span class="va">prev_true_vec</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along</a></span><span class="op">(</span><span class="va">prev_true_vec</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">fit_power_i</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/multi_trial.html">multi_trial</a></span><span class="op">(</span></span>
 <span>  sens_true <span class="op">=</span> <span class="fl">0.824</span>,</span>
 <span>  spec_true <span class="op">=</span> <span class="fl">0.963</span>,</span>
@@ -251,13 +250,14 @@ the <code><a href="../reference/multi_trial.html">multi_trial()</a></code> funct
 <span>  n_at_looks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">700</span>, <span class="fl">50</span><span class="op">)</span>,</span>
 <span>  n_mc <span class="op">=</span> <span class="fl">1000</span>,</span>
 <span>  n_trials <span class="op">=</span> <span class="fl">100</span>,</span>
+<span>  seed <span class="op">=</span> <span class="fl">1234L</span>,</span>
 <span>  ncores <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span>
 <span>  </span>
 <span>  <span class="va">out</span> <span class="op">&lt;-</span> <span class="fu"><a href="../reference/summarise_trials.html">summarise_trials</a></span><span class="op">(</span><span class="va">fit_power_i</span>, min_pos <span class="op">=</span> <span class="fl">30</span>, fut <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span>  <span class="va">tab</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/cbind.html" class="external-link">rbind</a></span><span class="op">(</span><span class="va">tab</span>, <span class="va">out</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
-<p>We can then use this this to understand how the power changes with
-the the assumed true prevalence value, as</p>
+<p>We can then use this to understand how the power changes with the
+assumed true prevalence value, as</p>
 <div class="sourceCode" id="cb10"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html" class="external-link">plot</a></span><span class="op">(</span><span class="va">prev_true_vec</span>, <span class="va">tab</span><span class="op">$</span><span class="va">power</span>,</span>
 <span>     xlab <span class="op">=</span> <span class="st">"True prevalence"</span>,</span>

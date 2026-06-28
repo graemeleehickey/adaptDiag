@@ -28,11 +28,12 @@ P[\pi_1 > 0.70 | \text{Data}] \ge 0.985 \, \text{  and } P[\pi_0 > 0.90 | \text{
 Based on this, we know that
 
 ``` r
+
 sens_pg <- 0.7
 spec_pg <- 0.9
 
-succ_sens <- 0.985,
-succ_spec <- 0.985,
+succ_sens <- 0.985
+succ_spec <- 0.985
 
 endpoint <- "both"
 ```
@@ -87,8 +88,6 @@ function as follows:
 
 ``` r
 
-library(adaptDiag)
-
 fit_power <- multi_trial(
   sens_true = 0.824,
   spec_true = 0.963,
@@ -104,6 +103,7 @@ fit_power <- multi_trial(
   n_at_looks = seq(200, 700, 50),
   n_mc = 10000,
   n_trials = 200,
+  seed = 1234L,
   ncores = 1L)
 #> Loading required package: foreach
 #> Loading required package: rngtools
@@ -124,8 +124,8 @@ the futility stopping rule was set at 5% – that is, if the posterior
 predictive probability of eventual study success is \<0.05, the study
 will terminate early.
 
-We add in an additional criteria that the study cannot stop for early
-success or futilty until a fixed number of reference positive cases are
+We add in an additional criterion that the study cannot stop for early
+success or futility until a fixed number of reference positive cases are
 observed. We implement these 2 criteria and extract the operating
 characteristic as follows:
 
@@ -134,12 +134,11 @@ characteristic as follows:
 summarise_trials(fit_power, min_pos = 30, fut = 0.05)
 #>                    n
 #> decision            200 250 300 350 400 450 500 550 600 650 700
-#>   early win          71  21  27  22  10  14   8   2   2   6   0
-#>   late win            0   0   0   0   0   0   0   0   0   0   5
-#>   no stopping         0   0   0   0   0   0   0   0   0   0   3
-#>   stop for futility   1   0   2   0   1   1   0   0   1   3   0
-#>   power stop_futility  n_avg     sens      spec mean_pos
-#> 1  0.94         0.045 327.75 0.841612 0.9653305   65.665
+#>   early win          62  28  21  23  16  10   9   6   5   4   0
+#>   late win            0   0   0   0   0   0   0   0   0   0   2
+#>   stop for futility   5   0   2   0   1   0   2   4   0   0   0
+#>   power stop_futility  n_avg      sens      spec mean_pos
+#> 1  0.93          0.07 323.25 0.8374433 0.9635257    64.43
 ```
 
 The printed output shows a table with columns listing the sample size
@@ -159,10 +158,10 @@ fit_type1 <- update(fit_power,
 
 summarise_trials(fit_type1, min_pos = 30, fut = 0.05)
 #>                    n
-#> decision            200 250 300 350 400 550
-#>   stop for futility 160  17  14   5   2   2
-#>   power stop_futility n_avg      sens      spec mean_pos
-#> 1     0             1 220.5 0.6939263 0.8972075    44.07
+#> decision            200 250 300 350 400 450 500 550
+#>   stop for futility 160  18  12   2   2   3   1   2
+#>   power stop_futility  n_avg      sens      spec mean_pos
+#> 1     0             1 222.75 0.6924178 0.8998399   44.405
 ```
 
 The operating characteristics show the type I error is well controlled
@@ -190,7 +189,7 @@ function within a loop:
 
 tab <- NULL
 
-for (i in 1:length(prev_true_vec)) {
+for (i in seq_along(prev_true_vec)) {
   fit_power_i <- multi_trial(
   sens_true = 0.824,
   spec_true = 0.963,
@@ -206,6 +205,7 @@ for (i in 1:length(prev_true_vec)) {
   n_at_looks = seq(200, 700, 50),
   n_mc = 1000,
   n_trials = 100,
+  seed = 1234L,
   ncores = 1L)
   
   out <- summarise_trials(fit_power_i, min_pos = 30, fut = 0.05)
@@ -213,8 +213,8 @@ for (i in 1:length(prev_true_vec)) {
 }
 ```
 
-We can then use this this to understand how the power changes with the
-the assumed true prevalence value, as
+We can then use this to understand how the power changes with the
+assumed true prevalence value, as
 
 ``` r
 

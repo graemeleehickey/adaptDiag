@@ -12,7 +12,7 @@ required level. When incorporating a futility stopping rule that is
 binding and based on posterior predictive probabilities, it can
 ameliorate the inherent type I error inflation. However, to what degree
 is unknown, and there are no simple formulae to calculate this. It is
-therefore necessary to use simulation methods to tune the threshold
+therefore necessary to use simulation methods to tune the threshold.
 
 ## Example
 
@@ -34,8 +34,6 @@ sensitivity point estimate from a pilot study. The following tells us
 the number of reference-positive cases we would need:
 
 ``` r
-
-library(adaptDiag)
 
 ss <- binom_sample_size(alpha = 0.05, power = 0.9, p0 = 0.7, p1 = 0.824)
 ss
@@ -85,7 +83,7 @@ below takes about 20 minutes to run.
 
 tab <- NULL
 
-for (i in 1:length(p_thresh)) {
+for (i in seq_along(p_thresh)) {
   fit_p <- multi_trial(
     sens_true = 0.7,
     spec_true = 0.963,
@@ -100,6 +98,7 @@ for (i in 1:length(p_thresh)) {
     n_at_looks = seq(100, 600, 50),
     n_mc = 10000,
     n_trials = 5000,
+    seed = 1234L,
     ncores = 8L)
 
   out <- summarise_trials(fit_p, min_pos = 35, fut = 0.05)
@@ -153,6 +152,7 @@ power <- multi_trial(
     n_at_looks = seq(100, 600, 50),
     n_mc = 10000,
     n_trials = 5000,
+    seed = 5678L,
     ncores = 8L)
 ```
 
