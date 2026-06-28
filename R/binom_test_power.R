@@ -63,7 +63,8 @@ binom_sample_size <- function(
 
   # Initial estimate: normal approximation
   # Chow et al. (2017), page 85
-  N_approx <- (qnorm(power) + qnorm(1 - alpha))^2 * (p1 * (1 - p1)) / (p1 - p0)^2
+  N_approx <- (qnorm(1 - alpha) * sqrt(p0 * (1 - p0)) +
+               qnorm(power)     * sqrt(p1 * (1 - p1)))^2 / (p1 - p0)^2
 
   # Search range
   N_start <- floor(0.5 * N_approx)

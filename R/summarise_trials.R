@@ -121,7 +121,7 @@ evaluate_trial <- function(x, args) {
   pass <- 0
   futile <- 0
 
-  for (i in 1:n_looks) {
+  for (i in seq_len(n_looks)) {
     if (args$min_pos > (x$tp[i] + x$fn[i])) {
       if (i == n_looks) {
         decision <- "no stopping - insufficient positive cases"
@@ -131,10 +131,10 @@ evaluate_trial <- function(x, args) {
       }
     }
     if (args$endpoint == "both") {
-      if ((x$pp_sens[i] >= args$succ_sens) & (x$pp_spec[i] >= args$succ_spec)) {
+      if ((x$pp_sens[i] >= args$succ_sens) && (x$pp_spec[i] >= args$succ_spec)) {
         decision <- ifelse(i < n_looks, "early win", "late win")
         break
-      } else if ((x$ppp_succ_both[i] < args$fut) & (i < n_looks)) {
+      } else if ((x$ppp_succ_both[i] < args$fut) && (i < n_looks)) {
         decision <- "stop for futility"
         break
       } else {
@@ -144,7 +144,7 @@ evaluate_trial <- function(x, args) {
       if (x$pp_sens[i] >= args$succ_sens) {
         decision <- ifelse(i < n_looks, "early win", "late win")
         break
-      } else if ((x$ppp_succ_sens[i] < args$fut) & (i < n_looks)) {
+      } else if ((x$ppp_succ_sens[i] < args$fut) && (i < n_looks)) {
         decision <- "stop for futility"
         break
       } else {
@@ -154,7 +154,7 @@ evaluate_trial <- function(x, args) {
       if (x$pp_spec[i] >= args$succ_spec) {
         decision <- ifelse(i < n_looks, "early win", "late win")
         break
-      } else if ((x$ppp_succ_spec[i] < args$fut) & (i < n_looks)) {
+      } else if ((x$ppp_succ_spec[i] < args$fut) && (i < n_looks)) {
         decision <- "stop for futility"
         break
       } else {

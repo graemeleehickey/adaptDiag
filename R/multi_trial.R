@@ -27,12 +27,18 @@ utils::globalVariables("x")
 #' @param spec_pg scalar. Performance goal (PG) for the specificity endpoint,
 #'   such that the posterior probability that the PG is exceeded is
 #'   calculated. Must be between 0 and 1.
-#' @param prior_sens vector. A vector of length 2 with the prior shape
-#'   parameters for the sensitivity Beta distribution.
-#' @param prior_spec vector. A vector of length 2 with the prior shape
-#'   parameters for the specificity Beta distribution.
-#' @param prior_prev vector. A vector of length 2 with the prior shape
-#'   parameters for the prevalence Beta distribution.
+#' @param prior_sens vector. A vector of length 2 specifying the shape
+#'   parameters \eqn{(\alpha, \beta)} of the Beta prior for sensitivity.
+#'   \code{c(1, 1)} gives a uniform (non-informative) prior. \code{c(0.1, 0.1)}
+#'   is a near-Jeffreys prior that is bimodal, placing most mass near 0 and 1;
+#'   this can make the posterior sensitive to early data. An informative prior
+#'   derived from a pilot study is recommended when available.
+#' @param prior_spec vector. A vector of length 2 specifying the shape
+#'   parameters \eqn{(\alpha, \beta)} of the Beta prior for specificity. See
+#'   \code{prior_sens} for guidance on prior choice.
+#' @param prior_prev vector. A vector of length 2 specifying the shape
+#'   parameters \eqn{(\alpha, \beta)} of the Beta prior for prevalence. See
+#'   \code{prior_sens} for guidance on prior choice.
 #' @param succ_sens scalar. Probability threshold for the sensitivity to exceed
 #'   in order to declare a success. Must be between 0 and 1.
 #' @param succ_spec scalar. Probability threshold for the specificity to exceed

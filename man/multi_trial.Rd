@@ -49,14 +49,20 @@ calculated. Must be between 0 and 1.}
 such that the posterior probability that the PG is exceeded is
 calculated. Must be between 0 and 1.}
 
-\item{prior_sens}{vector. A vector of length 2 with the prior shape
-parameters for the sensitivity Beta distribution.}
+\item{prior_sens}{vector. A vector of length 2 specifying the shape
+parameters \eqn{(\alpha, \beta)} of the Beta prior for sensitivity.
+\code{c(1, 1)} gives a uniform (non-informative) prior. \code{c(0.1, 0.1)}
+is a near-Jeffreys prior that is bimodal, placing most mass near 0 and 1;
+this can make the posterior sensitive to early data. An informative prior
+derived from a pilot study is recommended when available.}
 
-\item{prior_spec}{vector. A vector of length 2 with the prior shape
-parameters for the specificity Beta distribution.}
+\item{prior_spec}{vector. A vector of length 2 specifying the shape
+parameters \eqn{(\alpha, \beta)} of the Beta prior for specificity. See
+\code{prior_sens} for guidance on prior choice.}
 
-\item{prior_prev}{vector. A vector of length 2 with the prior shape
-parameters for the prevalence Beta distribution.}
+\item{prior_prev}{vector. A vector of length 2 specifying the shape
+parameters \eqn{(\alpha, \beta)} of the Beta prior for prevalence. See
+\code{prior_sens} for guidance on prior choice.}
 
 \item{succ_sens}{scalar. Probability threshold for the sensitivity to exceed
 in order to declare a success. Must be between 0 and 1.}
