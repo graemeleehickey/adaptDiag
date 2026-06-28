@@ -7,7 +7,7 @@
 
     <a class="navbar-brand me-2" href="../index.html">adaptDiag</a>
 
-    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.2</small>
+    <small class="nav-text text-muted me-auto" data-bs-toggle="tooltip" data-bs-placement="bottom" title="">0.1.1</small>
 
 
     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar" aria-controls="navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -45,7 +45,7 @@
     </div>
 
     <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.2" id="adaptdiag-012">adaptDiag 0.1.2<a class="anchor" aria-label="anchor" href="#adaptdiag-012"></a></h2>
+<h2 class="pkg-version" data-toc-text="0.1.1" id="adaptdiag-011">adaptDiag 0.1.1<a class="anchor" aria-label="anchor" href="#adaptdiag-011"></a></h2>
 <ul><li>
 <code><a href="../reference/binom_sample_size.html">binom_sample_size()</a></code>: fixed the normal approximation used to initialise the sample size search. The previous formula used only <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><msub><mi>p</mi><mn>1</mn></msub><annotation encoding="application/x-tex">p_1</annotation></semantics></math> in the variance term; the correct Chow et al. (2017) formula uses <math display="inline" xmlns="http://www.w3.org/1998/Math/MathML"><semantics><mrow><msub><mi>z</mi><mi>α</mi></msub><msqrt><mrow><msub><mi>p</mi><mn>0</mn></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mn>0</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow></msqrt><mo>+</mo><msub><mi>z</mi><mi>β</mi></msub><msqrt><mrow><msub><mi>p</mi><mn>1</mn></msub><mo stretchy="false" form="prefix">(</mo><mn>1</mn><mo>−</mo><msub><mi>p</mi><mn>1</mn></msub><mo stretchy="false" form="postfix">)</mo></mrow></msqrt></mrow><annotation encoding="application/x-tex">z_\alpha\sqrt{p_0(1-p_0)} + z_\beta\sqrt{p_1(1-p_1)}</annotation></semantics></math>. The exact discrete search result is unchanged, but the approximation now matches the cited reference.</li>
 <li>
@@ -55,11 +55,6 @@
 <li>
 <code><a href="../reference/multi_trial.html">multi_trial()</a></code> now uses a single <code>foreach</code> + <code>doRNG::%dorng%</code> dispatch path for all platforms, replacing the previous platform-specific branches (<code><a href="https://rdrr.io/pkg/pbmcapply/man/pbmclapply.html" class="external-link">pbmcapply::pbmclapply</a></code> on Unix, <code>foreach::%dopar%</code> on Windows). This fixes a latent Windows bug and simplifies the implementation. <code>pbmcapply</code> has been removed as a dependency and <code>doRNG</code> added.</li>
 <li>Fixed an error in <code><a href="../reference/multi_trial.html">multi_trial()</a></code> that occurred at early interim looks with low prevalence, when zero observations fell into a cell of the 2×2 contingency table (<a href="https://github.com/graemeleehickey/adaptDiag/issues/5" class="external-link">#5</a>).</li>
-</ul></div>
-    <div class="section level2">
-<h2 class="pkg-version" data-toc-text="0.1.1" id="adaptdiag-011">adaptDiag 0.1.1<a class="anchor" aria-label="anchor" href="#adaptdiag-011"></a></h2>
-<ul><li>Updated GitHub actions workflows</li>
-<li>Updated README badges</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.0" id="adaptdiag-010">adaptDiag 0.1.0<a class="anchor" aria-label="anchor" href="#adaptdiag-010"></a></h2><p class="text-muted">CRAN release: 2021-08-17</p>

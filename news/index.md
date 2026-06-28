@@ -1,6 +1,6 @@
 # Changelog
 
-## adaptDiag 0.1.2
+## adaptDiag 0.1.1
 
 - [`binom_sample_size()`](https://graemeleehickey.github.io/adaptDiag/reference/binom_sample_size.md):
   fixed the normal approximation used to initialise the sample size
@@ -31,11 +31,6 @@
   that occurred at early interim looks with low prevalence, when zero
   observations fell into a cell of the 2×2 contingency table
   ([\#5](https://github.com/graemeleehickey/adaptDiag/issues/5)).
-
-## adaptDiag 0.1.1
-
-- Updated GitHub actions workflows
-- Updated README badges
 
 ## adaptDiag 0.1.0
 
