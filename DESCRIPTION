@@ -17,7 +17,9 @@ Description: Simulate clinical trials for diagnostic test devices and evaluate
     assessment determined via the posterior predictive probabilities.
 License: GPL-3
 Encoding: UTF-8
-URL: https://graemeleehickey.github.io/adaptDiag, https://github.com/graemeleehickey/adaptDiag
+URL: https://graemeleehickey.github.io/adaptDiag,
+    https://github.com/graemeleehickey/adaptDiag,
+    https://CRAN.R-project.org/package=adaptDiag
 BugReports: https://github.com/graemeleehickey/adaptDiag/issues
 Depends:
     R (>= 3.6.0)
