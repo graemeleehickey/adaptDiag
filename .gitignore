@@ -8,4 +8,5 @@ docs/
 README.html
 vignettes/*_cache/
 vignettes/*_files/
+.posit/
 .posit/assistant/settings.json
