@@ -10,18 +10,19 @@
 #' @param prev_true scalar. True assumed prevalence as measured by the
 #'   gold-standard reference test (must be between 0 and 1).
 #' @param endpoint character. The endpoint(s) that must meet a performance goal
-#'   criterion. The default is \code{code = "both"}, which means that the
+#'   criterion. The default is \code{endpoint = "both"}, which means that the
 #'   endpoint is based simultaneously on sensitivity and specificity.
-#'   Alternative options are to specify \code{code = "sens"} or \code{code =
-#'   "spec"} for sensitivity and specificity, respectively. If only a single
+#'   Alternative options are to specify \code{endpoint = "sens"} or
+#'   \code{endpoint = "spec"} for sensitivity and specificity, respectively.
+#'   If only a single
 #'   endpoint is selected (e.g. sensitivity), then the PG and success
 #'   probability threshold of the other statistic are set to 1, and ignored for
 #'   later analysis.
 #' @param sens_pg scalar. Performance goal (PG) for the sensitivity endpoint,
-#'   such that the the posterior probability that the PG is exceeded is
+#'   such that the posterior probability that the PG is exceeded is
 #'   calculated. Must be between 0 and 1.
 #' @param spec_pg scalar. Performance goal (PG) for the specificity endpoint,
-#'   such that the the posterior probability that the PG is exceeded is
+#'   such that the posterior probability that the PG is exceeded is
 #'   calculated. Must be between 0 and 1.
 #' @param prior_sens vector. A vector of length 2 with the prior shape
 #'   parameters for the sensitivity Beta distribution.
@@ -222,22 +223,23 @@ multi_trial <- function(
   # Check: cannot specify <1 core
   if (ncores < 1) {
     warning("Must use at least 1 core... setting ncores = 1")
+    ncores <- 1L
   }
 
   # Check: endpoint selection
   if (endpoint == "both") {
     # Both
-    if (is.null(sens_pg) | is.null(spec_pg) |
-        missing(sens_pg) | missing(spec_pg)) {
+    if (is.null(sens_pg) || is.null(spec_pg) ||
+        missing(sens_pg) || missing(spec_pg)) {
       stop("Missing performance goal argument")
     }
-    if (is.null(succ_sens) | is.null(succ_spec) |
-        missing(succ_sens) | missing(succ_spec)) {
+    if (is.null(succ_sens) || is.null(succ_spec) ||
+        missing(succ_sens) || missing(succ_spec)) {
       stop("Missing probability threshold argument")
     }
   } else if (endpoint == "sens") {
     # Sensitivity only
-    if (is.null(sens_pg) | missing(sens_pg) | is.na(sens_pg)) {
+    if (is.null(sens_pg) || missing(sens_pg) || is.na(sens_pg)) {
       stop("Missing performance goal argument")
     }
     if (!is.null(spec_pg)) {
@@ -247,7 +249,7 @@ multi_trial <- function(
     succ_spec <- 1 # can never exceed this
   } else if (endpoint == "spec") {
     # Specificity only
-    if (is.null(spec_pg) | missing(spec_pg) | is.na(spec_pg)) {
+    if (is.null(spec_pg) || missing(spec_pg) || is.na(spec_pg)) {
       stop("Missing performance goal argument")
     }
     if (!is.null(sens_pg)) {
@@ -260,13 +262,13 @@ multi_trial <- function(
   }
 
   # Check: true values specified
-  if (missing(sens_true) | missing(spec_true) | missing(prev_true)) {
-    stop("True values must be provided for for sensitivity, specificity, and prevalence")
+  if (missing(sens_true) || missing(spec_true) || missing(prev_true)) {
+    stop("True values must be provided for sensitivity, specificity, and prevalence")
   }
 
   # Check: prior distributions specified
-  if (missing(prior_sens) | missing(prior_spec) | missing(prior_prev) |
-      is.null(prior_sens) | is.null(prior_spec) | is.null(prior_prev)) {
+  if (missing(prior_sens) || missing(prior_spec) || missing(prior_prev) ||
+      is.null(prior_sens) || is.null(prior_spec) || is.null(prior_prev)) {
     stop("Prior distribution parameters must be provided for sensitivity, specificity, and prevalence")
   }
 
@@ -289,19 +291,19 @@ multi_trial <- function(
   if (.Platform$OS.type == "windows") {
     # Windows systems
     if (ncores == 1L) {
-      sims <- lapply(X = 1:n_trials,
+      sims <- lapply(X = seq_len(n_trials),
                      FUN = single_trial_wrapper)
     } else {
       doParallel::registerDoParallel(cores = ncores)
-      sims <- foreach(x = 1:n_trials, .packages = 'adaptDiag',
+      sims <- foreach(x = seq_len(n_trials), .packages = 'adaptDiag',
                       .combine = rbind) %dopar% {
-                        single_trial_wrapper()
+                        single_trial_wrapper(x)
                       }
       registerDoSEQ()
     }
   } else {
     # *nix systems
-    sims <- pbmclapply(X = 1:n_trials,
+    sims <- pbmclapply(X = seq_len(n_trials),
                        FUN = single_trial_wrapper,
                        mc.cores = ncores)
 

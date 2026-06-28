@@ -108,10 +108,10 @@ summarise_trials <- function(data, min_pos = 1, fut = 0) {
 #'   \item{\code{no stopping}:} The trial progressed all the way to the final
 #'   sample size look and did not trigger any stopping rules or other
 #'   constraints.
-#'   \item{\code{no stopping}:} The trial progressed all the way to the final
-#'   sample size look and did not trigger any stopping rules, however the number
-#'   of reference positive cases was less than the minimum constrain
-#'   (\code{min_pos}).
+#'   \item{\code{no stopping - insufficient positive cases}:} The trial
+#'   progressed all the way to the final sample size look and did not trigger
+#'   any stopping rules, however the number of reference positive cases was
+#'   less than the minimum constraint (\code{min_pos}).
 #' }
 #'
 #' @noRd

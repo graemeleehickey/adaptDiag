@@ -31,20 +31,21 @@ multi_trial(
 gold-standard reference test (must be between 0 and 1).}
 
 \item{endpoint}{character. The endpoint(s) that must meet a performance goal
-criterion. The default is \code{code = "both"}, which means that the
+criterion. The default is \code{endpoint = "both"}, which means that the
 endpoint is based simultaneously on sensitivity and specificity.
-Alternative options are to specify \code{code = "sens"} or \code{code =
-"spec"} for sensitivity and specificity, respectively. If only a single
+Alternative options are to specify \code{endpoint = "sens"} or
+\code{endpoint = "spec"} for sensitivity and specificity, respectively.
+If only a single
 endpoint is selected (e.g. sensitivity), then the PG and success
 probability threshold of the other statistic are set to 1, and ignored for
 later analysis.}
 
 \item{sens_pg}{scalar. Performance goal (PG) for the sensitivity endpoint,
-such that the the posterior probability that the PG is exceeded is
+such that the posterior probability that the PG is exceeded is
 calculated. Must be between 0 and 1.}
 
 \item{spec_pg}{scalar. Performance goal (PG) for the specificity endpoint,
-such that the the posterior probability that the PG is exceeded is
+such that the posterior probability that the PG is exceeded is
 calculated. Must be between 0 and 1.}
 
 \item{prior_sens}{vector. A vector of length 2 with the prior shape

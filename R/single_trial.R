@@ -26,7 +26,7 @@ single_trial <- function(
                            prev_true  = prev_true)
 
   out <- NULL
-  for (k in 1:length(n_at_looks)) {
+  for (k in seq_along(n_at_looks)) {
 
     trial <- analysis(data = sim_dat,
                       k          = k,

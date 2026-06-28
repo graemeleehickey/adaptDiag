@@ -1,0 +1,46 @@
+url: https://graemeleehickey.github.io/adaptDiag
+
+template:
+  bootstrap: 5
+
+home:
+  title: Bayesian Adaptive Designs for Diagnostic Trials
+  description: >
+    Simulate clinical trials for diagnostic test devices and evaluate operating
+    characteristics under an adaptive design with futility assessment determined
+    via posterior predictive probabilities.
+
+navbar:
+  structure:
+    left:  [intro, reference, articles, news]
+    right: [search, github]
+  components:
+    github:
+      icon: fab fa-github fa-lg
+      href: https://github.com/graemeleehickey/adaptDiag
+      aria-label: GitHub
+
+reference:
+  - title: Simulation
+    desc: Simulate and analyse multiple adaptive diagnostic trials.
+    contents:
+      - multi_trial
+      - summarise_trials
+  - title: Sample size
+    desc: Calculate sample sizes for exact binomial tests.
+    contents:
+      - binom_sample_size
+
+articles:
+  - title: Vignettes
+    navbar: ~
+    contents:
+      - julian
+      - type1-error
+
+news:
+  releases:
+    - text: "Version 0.1.1"
+      href: https://github.com/graemeleehickey/adaptDiag/releases/tag/v0.1.1
+    - text: "Version 0.1.0"
+      href: https://github.com/graemeleehickey/adaptDiag/releases/tag/v0.1.0

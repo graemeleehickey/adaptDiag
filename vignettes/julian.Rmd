@@ -2,7 +2,7 @@
 title: "Example: GeneSearch Breast Lymph Node Assay"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{julian}
+  %\VignetteIndexEntry{Example: GeneSearch Breast Lymph Node Assay}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -13,6 +13,10 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 options(rmarkdown.html_vignette.check_title = FALSE)
+```
+
+```{r setup}
+library(adaptDiag)
 ```
 
 ## Problem

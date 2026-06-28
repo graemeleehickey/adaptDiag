@@ -1,7 +1,7 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-# adaptDiag <img src="man/figures/hex.png" width = "175" height = "200" align="right" />
+# adaptDiag <img src="man/figures/hex.png" alt="adaptDiag hex logo" width = "175" height = "200" align="right" />
 
 <!-- badges: start -->
 
@@ -10,6 +10,7 @@ status](https://www.r-pkg.org/badges/version/adaptDiag)](https://CRAN.R-project.
 [![Codecov test
 coverage](https://codecov.io/gh/graemeleehickey/adaptDiag/graph/badge.svg)](https://app.codecov.io/gh/graemeleehickey/adaptDiag)
 [![R-CMD-check](https://github.com/graemeleehickey/adaptDiag/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/graemeleehickey/adaptDiag/actions/workflows/R-CMD-check.yaml)
+[![pkgdown](https://github.com/graemeleehickey/adaptDiag/actions/workflows/pkgdown.yaml/badge.svg)](https://graemeleehickey.github.io/adaptDiag/)
 <!-- badges: end -->
 
 The goal of `adaptDiag` is to simplify the process of designing adaptive

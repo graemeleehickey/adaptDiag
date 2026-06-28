@@ -12,7 +12,7 @@ binom_sample_size(alpha = 0.05, power = 0.9, p0 = 0.9, p1 = 0.95)
 incorrectly rejecting the null). Must be be between 0 and 1. Default value
 is \code{alpha = 0.05}.}
 
-\item{power}{scalar. The the minimum probability of correctly rejects the
+\item{power}{scalar. The minimum probability of correctly rejecting the
 null when the alternate is true.}
 
 \item{p0}{scalar. The expected proportion of successes under the null.}

@@ -2,7 +2,7 @@
 title: "Type I error control"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{type1-error}
+  %\VignetteIndexEntry{Type I error control}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
@@ -12,6 +12,10 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+```
+
+```{r setup}
+library(adaptDiag)
 ```
 
 For studies that incorporate multiple looks, it is usually necessary to control the type I error by ensuring the success threshold is sufficiently large that the overall type I error is controlled at the required level. When incorporating a futility stopping rule that is binding and based on posterior predictive probabilities, it can ameliorate the inherent type I error inflation. However, to what degree is unknown, and there are no simple formulae to calculate this. It is therefore necessary to use simulation methods to tune the threshold
