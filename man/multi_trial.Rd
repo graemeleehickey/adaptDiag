@@ -19,6 +19,7 @@ multi_trial(
   n_at_looks,
   n_mc = 10000,
   n_trials = 1000,
+  seed = NULL,
   ncores
 )
 }
@@ -72,6 +73,10 @@ Beta-Binomial distribution.}
 
 \item{n_trials}{integer. The number of clinical trials to simulate overall,
 which will be used to evaluate the operating characteristics.}
+
+\item{seed}{integer. Optional random seed passed to \code{\link[base]{set.seed}}
+before simulations begin, to ensure reproducibility. Default is \code{NULL}
+(no seed set).}
 
 \item{ncores}{integer. The number of cores to use for parallel processing. If
 `ncores` is missing, it defaults to the maximum number of cores available
@@ -203,10 +208,12 @@ the probability for both endpoints simultaneously.
 
 
 To use multiple cores (where available), the argument \code{ncores} can be
-increased from the default of 1. On UNIX machines (including macOS),
-parallelization is performed using the \code{\link[parallel]{mclapply}}
-function with \code{ncores} \eqn{>1}. On Windows machines, parallel
-processing is implemented via the \code{\link[foreach]{foreach}} function.
+increased from the default of 1. Parallelization uses
+\code{\link[doParallel]{registerDoParallel}} with a PSOCK cluster, which
+works on all platforms including Windows. The
+\code{\link[doRNG]{\%dorng\%}} operator from the \pkg{doRNG} package is
+used in place of the standard \code{\%dopar\%}, ensuring that results are
+fully reproducible across all backends when a \code{seed} is supplied.
 }
 
 \examples{

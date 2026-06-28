@@ -23,10 +23,10 @@ Depends:
     R (>= 3.6.0)
 Imports:
     doParallel,
+    doRNG,
     extraDistr,
     foreach,
     parallel,
-    pbmcapply,
     stats
 Language: en-US
 RoxygenNote: 7.3.3

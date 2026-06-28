@@ -1,3 +1,6 @@
+# Suppress R CMD check NOTE for foreach iteration variable
+utils::globalVariables("x")
+
 #' @title Simulate and analyse multiple trials
 #'
 #' @description Multiple trials and simulated and analysed up to the final
@@ -41,6 +44,9 @@
 #'   Beta-Binomial distribution.
 #' @param n_trials integer. The number of clinical trials to simulate overall,
 #'   which will be used to evaluate the operating characteristics.
+#' @param seed integer. Optional random seed passed to \code{\link[base]{set.seed}}
+#'   before simulations begin, to ensure reproducibility. Default is \code{NULL}
+#'   (no seed set).
 #' @param ncores integer. The number of cores to use for parallel processing. If
 #'   `ncores` is missing, it defaults to the maximum number of cores available
 #'   (spare 1).
@@ -123,10 +129,12 @@
 #' @section Parallelization:
 #'
 #' To use multiple cores (where available), the argument \code{ncores} can be
-#' increased from the default of 1. On UNIX machines (including macOS),
-#' parallelization is performed using the \code{\link[parallel]{mclapply}}
-#' function with \code{ncores} \eqn{>1}. On Windows machines, parallel
-#' processing is implemented via the \code{\link[foreach]{foreach}} function.
+#' increased from the default of 1. Parallelization uses
+#' \code{\link[doParallel]{registerDoParallel}} with a PSOCK cluster, which
+#' works on all platforms including Windows. The
+#' \code{\link[doRNG]{\%dorng\%}} operator from the \pkg{doRNG} package is
+#' used in place of the standard \code{\%dopar\%}, ensuring that results are
+#' fully reproducible across all backends when a \code{seed} is supplied.
 #'
 #' @return A list containing a data frame with rows for each stage of the trial
 #'   (i.e. each sample size look), irrespective of whether the trial meets the
@@ -189,13 +197,12 @@
 #'   ncores = 1
 #' )
 #'
-#' @importFrom parallel detectCores
-#' @importFrom pbmcapply pbmclapply
+#' @importFrom parallel detectCores makeCluster stopCluster
 #' @importFrom doParallel registerDoParallel
-#' @importFrom foreach foreach registerDoSEQ '%dopar%'
+#' @importFrom foreach foreach registerDoSEQ
+#' @importFrom doRNG '%dorng%'
 #'
 #' @export
-utils::globalVariables("x")
 multi_trial <- function(
   sens_true,
   spec_true,
@@ -211,6 +218,7 @@ multi_trial <- function(
   n_at_looks,
   n_mc = 10000,
   n_trials = 1000,
+  seed = NULL,
   ncores
 ) {
 
@@ -289,26 +297,26 @@ multi_trial <- function(
       n_mc       = n_mc)
   }
 
-  if (.Platform$OS.type == "windows") {
-    # Windows systems
-    if (ncores == 1L) {
-      sims <- lapply(X = seq_len(n_trials),
-                     FUN = single_trial_wrapper)
-    } else {
-      doParallel::registerDoParallel(cores = ncores)
-      sims <- foreach(x = seq_len(n_trials), .packages = 'adaptDiag',
-                      .combine = rbind) %dopar% {
-                        single_trial_wrapper(x)
-                      }
-      registerDoSEQ()
-    }
-  } else {
-    # *nix systems
-    sims <- pbmclapply(X = seq_len(n_trials),
-                       FUN = single_trial_wrapper,
-                       mc.cores = ncores)
+  # Generate per-trial seeds in the parent process so results are reproducible
+  # regardless of backend. .options.RNG passes the seed to %dorng%.
+  rng_seed <- if (!is.null(seed)) seed else NULL
 
-    sims <- do.call("rbind", sims)
+  if (ncores > 1L) {
+    cl <- makeCluster(ncores)
+    registerDoParallel(cl)
+    on.exit(stopCluster(cl), add = TRUE)
+    on.exit(registerDoSEQ(), add = TRUE)
+  } else {
+    registerDoSEQ()
+  }
+
+  sims <- foreach(
+    x = seq_len(n_trials),
+    .combine     = rbind,
+    .packages    = "adaptDiag",
+    .options.RNG = rng_seed
+  ) %dorng% {
+    single_trial_wrapper(x)
   }
 
   sims$trial <- rep(1:n_trials, each = length(n_at_looks))
@@ -326,7 +334,8 @@ multi_trial <- function(
                "succ_spec"  = succ_spec,
                "n_at_looks" = n_at_looks,
                "n_mc"       = n_mc,
-               "n_trials"   = n_trials)
+               "n_trials"   = n_trials,
+               "seed"       = seed)
 
   out <- list(sims = sims,
               call = Call,
