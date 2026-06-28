@@ -2,6 +2,7 @@ url: https://graemeleehickey.github.io/adaptDiag
 
 template:
   bootstrap: 5
+  light-switch: true
 
 home:
   title: Bayesian Adaptive Designs for Diagnostic Trials

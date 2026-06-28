@@ -7,10 +7,16 @@
 
 [![CRAN
 status](https://www.r-pkg.org/badges/version/adaptDiag)](https://CRAN.R-project.org/package=adaptDiag)
+[![CRAN
+downloads](https://cranlogs.r-pkg.org/badges/adaptDiag)](https://CRAN.R-project.org/package=adaptDiag)
 [![Codecov test
 coverage](https://codecov.io/gh/graemeleehickey/adaptDiag/graph/badge.svg)](https://app.codecov.io/gh/graemeleehickey/adaptDiag)
 [![R-CMD-check](https://github.com/graemeleehickey/adaptDiag/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/graemeleehickey/adaptDiag/actions/workflows/R-CMD-check.yaml)
 [![pkgdown](https://github.com/graemeleehickey/adaptDiag/actions/workflows/pkgdown.yaml/badge.svg)](https://graemeleehickey.github.io/adaptDiag/)
+[![License: GPL
+v3](https://img.shields.io/badge/License-GPLv3-blue.svg)](https://www.gnu.org/licenses/gpl-3.0)
+[![Lifecycle:
+stable](https://img.shields.io/badge/lifecycle-stable-brightgreen.svg)](https://lifecycle.r-lib.org/articles/stages.html#stable)
 <!-- badges: end -->
 
 The goal of `adaptDiag` is to simplify the process of designing adaptive
