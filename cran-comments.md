@@ -13,7 +13,7 @@
 
 0 errors | 0 warnings | 0 notes
 
-## Changes since last submission (0.1.1)
+## Changes since last submission (0.1.0)
 
 * `multi_trial()`: added a `seed` argument for reproducible simulations.
   Reproducibility is handled via `doRNG::%dorng%`, which correctly manages
