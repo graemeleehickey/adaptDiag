@@ -228,7 +228,6 @@ multi_trial <- function(
   seed = NULL,
   ncores
 ) {
-
   Call <- match.call()
 
   # Check: missing 'ncores' defaults to maximum available (spare 1)
@@ -245,12 +244,20 @@ multi_trial <- function(
   # Check: endpoint selection
   if (endpoint == "both") {
     # Both
-    if (is.null(sens_pg) || is.null(spec_pg) ||
-        missing(sens_pg) || missing(spec_pg)) {
+    if (
+      is.null(sens_pg) ||
+        is.null(spec_pg) ||
+        missing(sens_pg) ||
+        missing(spec_pg)
+    ) {
       stop("Missing performance goal argument")
     }
-    if (is.null(succ_sens) || is.null(succ_spec) ||
-        missing(succ_sens) || missing(succ_spec)) {
+    if (
+      is.null(succ_sens) ||
+        is.null(succ_spec) ||
+        missing(succ_sens) ||
+        missing(succ_spec)
+    ) {
       stop("Missing probability threshold argument")
     }
   } else if (endpoint == "sens") {
@@ -261,7 +268,7 @@ multi_trial <- function(
     if (!is.null(spec_pg)) {
       warning("spec_pg is being ignored")
     }
-    spec_pg <- 1   # can never exceed this
+    spec_pg <- 1 # can never exceed this
     succ_spec <- 1 # can never exceed this
   } else if (endpoint == "spec") {
     # Specificity only
@@ -271,7 +278,7 @@ multi_trial <- function(
     if (!is.null(sens_pg)) {
       warning("sens_pg is being ignored")
     }
-    sens_pg <- 1   # can never exceed this
+    sens_pg <- 1 # can never exceed this
     succ_sens <- 1 # can never exceed this
   } else {
     stop("endpoint should be either 'both', 'sens', or 'spec'")
@@ -279,29 +286,40 @@ multi_trial <- function(
 
   # Check: true values specified
   if (missing(sens_true) || missing(spec_true) || missing(prev_true)) {
-    stop("True values must be provided for sensitivity, specificity, and prevalence")
+    stop(
+      "True values must be provided for sensitivity, specificity, and prevalence"
+    )
   }
 
   # Check: prior distributions specified
-  if (missing(prior_sens) || missing(prior_spec) || missing(prior_prev) ||
-      is.null(prior_sens) || is.null(prior_spec) || is.null(prior_prev)) {
-    stop("Prior distribution parameters must be provided for sensitivity, specificity, and prevalence")
+  if (
+    missing(prior_sens) ||
+      missing(prior_spec) ||
+      missing(prior_prev) ||
+      is.null(prior_sens) ||
+      is.null(prior_spec) ||
+      is.null(prior_prev)
+  ) {
+    stop(
+      "Prior distribution parameters must be provided for sensitivity, specificity, and prevalence"
+    )
   }
 
   single_trial_wrapper <- function(x) {
     single_trial(
-      sens_true  = sens_true,
-      spec_true  = spec_true,
-      prev_true  = prev_true,
-      sens_pg    = sens_pg,
-      spec_pg    = spec_pg,
+      sens_true = sens_true,
+      spec_true = spec_true,
+      prev_true = prev_true,
+      sens_pg = sens_pg,
+      spec_pg = spec_pg,
       prior_sens = prior_sens,
       prior_spec = prior_spec,
       prior_prev = prior_prev,
-      succ_sens  = succ_sens,
-      succ_spec  = succ_spec,
+      succ_sens = succ_sens,
+      succ_spec = succ_spec,
       n_at_looks = n_at_looks,
-      n_mc       = n_mc)
+      n_mc = n_mc
+    )
   }
 
   # Generate per-trial seeds in the parent process so results are reproducible
@@ -322,37 +340,37 @@ multi_trial <- function(
   progress <- function(n) setTxtProgressBar(pb, n)
 
   sims <- foreach(
-    x            = seq_len(n_trials),
-    .combine     = rbind,
-    .packages    = "adaptDiag",
-    .options.RNG  = rng_seed,
+    x = seq_len(n_trials),
+    .combine = rbind,
+    .packages = "adaptDiag",
+    .options.RNG = rng_seed,
     .options.snow = list(progress = progress)
-  ) %dorng% {
-    single_trial_wrapper(x)
-  }
+  ) %dorng%
+    {
+      single_trial_wrapper(x)
+    }
 
   sims$trial <- rep(1:n_trials, each = length(n_at_looks))
 
-  args <- list("sens_true"  = sens_true,
-               "spec_true"  = spec_true,
-               "prev_true"  = prev_true,
-               "endpoint"   = endpoint,
-               "sens_pg"    = sens_pg,
-               "spec_pg"    = spec_pg,
-               "prior_sens" = prior_sens,
-               "prior_spec" = prior_spec,
-               "prior_prev" = prior_prev,
-               "succ_sens"  = succ_sens,
-               "succ_spec"  = succ_spec,
-               "n_at_looks" = n_at_looks,
-               "n_mc"       = n_mc,
-               "n_trials"   = n_trials,
-               "seed"       = seed)
+  args <- list(
+    "sens_true" = sens_true,
+    "spec_true" = spec_true,
+    "prev_true" = prev_true,
+    "endpoint" = endpoint,
+    "sens_pg" = sens_pg,
+    "spec_pg" = spec_pg,
+    "prior_sens" = prior_sens,
+    "prior_spec" = prior_spec,
+    "prior_prev" = prior_prev,
+    "succ_sens" = succ_sens,
+    "succ_spec" = succ_spec,
+    "n_at_looks" = n_at_looks,
+    "n_mc" = n_mc,
+    "n_trials" = n_trials,
+    "seed" = seed
+  )
 
-  out <- list(sims = sims,
-              call = Call,
-              args = args)
+  out <- list(sims = sims, call = Call, args = args)
 
   invisible(out)
-
 }

@@ -21,7 +21,10 @@ test_that("both endpoint works", {
   result <- summarise_trials(data, fut = 0.05)
   expect_s3_class(result, "data.frame")
   expect_equal(nrow(result), 1L)
-  expect_named(result, c("power", "stop_futility", "n_avg", "sens", "spec", "mean_pos"))
+  expect_named(
+    result,
+    c("power", "stop_futility", "n_avg", "sens", "spec", "mean_pos")
+  )
 })
 
 test_that("summarise_trials min_pos triggers insufficient positive cases decision", {

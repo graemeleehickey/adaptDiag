@@ -18,16 +18,14 @@
 #'
 #' @noRd
 simulate_data <- function(n, n_at_looks, sens_true, spec_true, prev_true) {
-
   id <- seq_len(n)
   stage <- vector(length = n)
   for (i in length(n_at_looks):1) {
     stage[id <= n_at_looks[i]] <- i
   }
-  ref_pos  <- rbinom(n, 1, prev_true)
+  ref_pos <- rbinom(n, 1, prev_true)
   test_pos <- rbinom(n, 1, ifelse(ref_pos == 1, sens_true, 1 - spec_true))
   dat <- data.frame(id, ref_pos, test_pos, stage)
 
   return(dat)
-
 }

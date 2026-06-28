@@ -9,44 +9,50 @@
 #'
 #' @noRd
 single_trial <- function(
-  sens_true, spec_true, prev_true,
-  sens_pg, spec_pg,
-  prior_sens, prior_spec, prior_prev,
-  succ_sens, succ_spec,
+  sens_true,
+  spec_true,
+  prev_true,
+  sens_pg,
+  spec_pg,
+  prior_sens,
+  prior_spec,
+  prior_prev,
+  succ_sens,
+  succ_spec,
   n_at_looks,
   n_mc
 ) {
-
   n_stages <- length(n_at_looks)
 
-  sim_dat <- simulate_data(n          = max(n_at_looks),
-                           n_at_looks = n_at_looks,
-                           sens_true  = sens_true,
-                           spec_true  = spec_true,
-                           prev_true  = prev_true)
+  sim_dat <- simulate_data(
+    n = max(n_at_looks),
+    n_at_looks = n_at_looks,
+    sens_true = sens_true,
+    spec_true = spec_true,
+    prev_true = prev_true
+  )
 
   out <- NULL
   for (k in seq_along(n_at_looks)) {
-
-    trial <- analysis(data = sim_dat,
-                      k          = k,
-                      sens_pg    = sens_pg,
-                      spec_pg    = spec_pg,
-                      prior_sens = prior_sens,
-                      prior_spec = prior_spec,
-                      prior_prev = prior_prev,
-                      succ_sens  = succ_sens,
-                      succ_spec  = succ_spec,
-                      n_at_looks = n_at_looks,
-                      n_mc       = n_mc)
+    trial <- analysis(
+      data = sim_dat,
+      k = k,
+      sens_pg = sens_pg,
+      spec_pg = spec_pg,
+      prior_sens = prior_sens,
+      prior_spec = prior_spec,
+      prior_prev = prior_prev,
+      succ_sens = succ_sens,
+      succ_spec = succ_spec,
+      n_at_looks = n_at_looks,
+      n_mc = n_mc
+    )
 
     out <- rbind(out, trial)
-
   }
 
   out$n <- n_at_looks
   rownames(out) <- NULL
 
   return(out)
-
 }

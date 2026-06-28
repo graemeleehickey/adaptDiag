@@ -23,13 +23,23 @@ test_that("binom_sample_size errors when p0 >= p1", {
 })
 
 test_that("binom_sample_size increases N with stricter power", {
-  low  <- binom_sample_size(alpha = 0.05, power = 0.8, p0 = 0.7, p1 = 0.85)
+  low <- binom_sample_size(alpha = 0.05, power = 0.8, p0 = 0.7, p1 = 0.85)
   high <- binom_sample_size(alpha = 0.05, power = 0.95, p0 = 0.7, p1 = 0.85)
   expect_lt(low$N, high$N)
 })
 
 test_that("binom_sample_size increases N with smaller effect size", {
-  large_effect <- binom_sample_size(alpha = 0.05, power = 0.9, p0 = 0.7, p1 = 0.95)
-  small_effect <- binom_sample_size(alpha = 0.05, power = 0.9, p0 = 0.7, p1 = 0.75)
+  large_effect <- binom_sample_size(
+    alpha = 0.05,
+    power = 0.9,
+    p0 = 0.7,
+    p1 = 0.95
+  )
+  small_effect <- binom_sample_size(
+    alpha = 0.05,
+    power = 0.9,
+    p0 = 0.7,
+    p1 = 0.75
+  )
   expect_lt(large_effect$N, small_effect$N)
 })

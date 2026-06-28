@@ -55,16 +55,18 @@ binom_sample_size <- function(
   alpha = 0.05,
   power = 0.9,
   p0 = 0.9,
-  p1 = 0.95) {
-
+  p1 = 0.95
+) {
   if (p0 >= p1) {
     stop("p0 must be less than p1")
   }
 
   # Initial estimate: normal approximation
   # Chow et al. (2017), page 85
-  N_approx <- (qnorm(1 - alpha) * sqrt(p0 * (1 - p0)) +
-               qnorm(power)     * sqrt(p1 * (1 - p1)))^2 / (p1 - p0)^2
+  N_approx <- (qnorm(1 - alpha) *
+    sqrt(p0 * (1 - p0)) +
+    qnorm(power) * sqrt(p1 * (1 - p1)))^2 /
+    (p1 - p0)^2
 
   # Search range
   N_start <- floor(0.5 * N_approx)
@@ -84,7 +86,5 @@ binom_sample_size <- function(
 
   # Get the required number of events to reject the null
   # given the sample size required
-  return(list(successes = crit.val[samp.size] + 1,
-              N = N[samp.size]))
-
+  return(list(successes = crit.val[samp.size] + 1, N = N[samp.size]))
 }

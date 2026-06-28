@@ -19,11 +19,11 @@ for (i in 1:length(p_thresh)) {
     n_at_looks = seq(100, 600, 50),
     n_mc = 10000,
     n_trials = 5000,
-    ncores = 8L)
+    ncores = 8L
+  )
 
   out <- summarise_trials(fit_p, min_pos = 35, fut = 0.05)
   tab <- rbind(tab, out)
-
 }
 
 power <- multi_trial(
@@ -40,6 +40,7 @@ power <- multi_trial(
   n_at_looks = seq(100, 600, 50),
   n_mc = 10000,
   n_trials = 5000,
-  ncores = 8L)
+  ncores = 8L
+)
 
 save(tab, power, file = "vignettes/vignette-sims.rda")
