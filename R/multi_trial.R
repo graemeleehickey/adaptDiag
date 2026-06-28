@@ -201,6 +201,7 @@ utils::globalVariables("x")
 #' @importFrom doParallel registerDoParallel
 #' @importFrom foreach foreach registerDoSEQ
 #' @importFrom doRNG '%dorng%'
+#' @importFrom utils txtProgressBar setTxtProgressBar
 #'
 #' @export
 multi_trial <- function(
@@ -310,11 +311,16 @@ multi_trial <- function(
     registerDoSEQ()
   }
 
+  pb <- txtProgressBar(min = 1, max = n_trials, style = 3)
+  on.exit(close(pb), add = TRUE)
+  progress <- function(n) setTxtProgressBar(pb, n)
+
   sims <- foreach(
-    x = seq_len(n_trials),
+    x            = seq_len(n_trials),
     .combine     = rbind,
     .packages    = "adaptDiag",
-    .options.RNG = rng_seed
+    .options.RNG  = rng_seed,
+    .options.snow = list(progress = progress)
   ) %dorng% {
     single_trial_wrapper(x)
   }
