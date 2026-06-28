@@ -105,6 +105,8 @@ fit_power <- multi_trial(
   n_mc = 10000,
   n_trials = 200,
   ncores = 1L)
+#> Loading required package: foreach
+#> Loading required package: rngtools
 ```
 
 Here, we have only simulated 200 trials here, using a total of 1 core.
@@ -132,12 +134,12 @@ characteristic as follows:
 summarise_trials(fit_power, min_pos = 30, fut = 0.05)
 #>                    n
 #> decision            200 250 300 350 400 450 500 550 600 650 700
-#>   early win          58  31  23  24  17  11   7   4   4   2   0
-#>   late win            0   0   0   0   0   0   0   0   0   0   2
-#>   no stopping         0   0   0   0   0   0   0   0   0   0   2
-#>   stop for futility   3   0   2   1   1   0   4   1   2   1   0
-#>   power stop_futility  n_avg      sens      spec mean_pos
-#> 1 0.915         0.075 324.75 0.8360627 0.9651927    64.62
+#>   early win          71  21  27  22  10  14   8   2   2   6   0
+#>   late win            0   0   0   0   0   0   0   0   0   0   5
+#>   no stopping         0   0   0   0   0   0   0   0   0   0   3
+#>   stop for futility   1   0   2   0   1   1   0   0   1   3   0
+#>   power stop_futility  n_avg     sens      spec mean_pos
+#> 1  0.94         0.045 327.75 0.841612 0.9653305   65.665
 ```
 
 The printed output shows a table with columns listing the sample size
@@ -157,10 +159,10 @@ fit_type1 <- update(fit_power,
 
 summarise_trials(fit_type1, min_pos = 30, fut = 0.05)
 #>                    n
-#> decision            200 250 300 350 400 450 500 550
-#>   stop for futility 158  21  11   5   1   2   1   1
-#>   power stop_futility  n_avg      sens      spec mean_pos
-#> 1     0             1 221.25 0.6892618 0.9013496    44.42
+#> decision            200 250 300 350 400 550
+#>   stop for futility 160  17  14   5   2   2
+#>   power stop_futility n_avg      sens      spec mean_pos
+#> 1     0             1 220.5 0.6939263 0.8972075    44.07
 ```
 
 The operating characteristics show the type I error is well controlled

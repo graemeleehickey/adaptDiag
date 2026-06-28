@@ -46,22 +46,11 @@
 
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.2.9000" id="adaptdiag-0129000">adaptDiag 0.1.2.9000<a class="anchor" aria-label="anchor" href="#adaptdiag-0129000"></a></h2>
-<ul><li>Fixed a bug in <code><a href="../reference/multi_trial.html">multi_trial()</a></code> where the Windows <code>foreach</code> parallel branch called <code>single_trial_wrapper()</code> without passing the iteration argument, causing silent incorrect behaviour on Windows.</li>
-<li>Fixed a bug in <code><a href="../reference/multi_trial.html">multi_trial()</a></code> where specifying <code>ncores &lt; 1</code> triggered a warning but did not reset the value to 1, causing a downstream error.</li>
-<li>Fixed a bug in <code>analysis()</code> where a simulated dataset with zero observations in any cell of the 2x2 contingency table (possible at early looks with low prevalence) would cause an error. The table is now constructed using <code><a href="https://rdrr.io/r/base/factor.html" class="external-link">factor()</a></code> with explicit levels to guarantee all cells are always present.</li>
-<li>Fixed scalar logical checks throughout <code><a href="../reference/multi_trial.html">multi_trial()</a></code> that used <code>|</code> and <code>&amp;</code> (vectorised) instead of <code>||</code> and <code>&amp;&amp;</code> (short-circuit).</li>
-<li>Fixed <code>1:n</code> idioms that are unsafe for zero-length inputs; replaced with <code><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_len()</a></code> and <code><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq_along()</a></code> throughout.</li>
-<li>Fixed all roxygen2 comment prefixes in <code>R/binom_test_power.R</code> from <code>##'</code> to <code>#'</code>; documentation for <code><a href="../reference/binom_sample_size.html">binom_sample_size()</a></code> was previously never generated from source.</li>
-<li>Fixed a broken <code>\link{\code{}}</code> tag in internal documentation for <code>analysis()</code>.</li>
-<li>Fixed several typos in <code><a href="../reference/multi_trial.html">multi_trial()</a></code> documentation: <code>\code{code = "both"}</code> corrected to <code>\code{endpoint = "both"}</code>, and doubled words (“the the”, “for for”) removed.</li>
-<li>Fixed a duplicate <code>\item</code> bullet in <code>evaluate_trial()</code> internal documentation; the “insufficient positive cases” outcome now has the correct label.</li>
-<li>Fixed the test description in <code>test-both.R</code> which incorrectly described a sensitivity-only test as “both test works”.</li>
-<li>Removed dead code in <code>simulate_data()</code> that handled a <code>NULL</code> <code>n_at_looks</code> argument that could never occur.</li>
-<li>Added a pkgdown site with Bootstrap 5, structured reference index, articles, and a GitHub Actions deploy workflow targeting GitHub Pages (#).</li>
-<li>Updated GitHub Actions workflows to latest standards: <code>actions/checkout@v6</code>, <code>codecov/codecov-action@v7</code> (SHA-pinned), <code>actions/upload-artifact@v7</code>, and removed deprecated <code>use-public-rspm</code> option.</li>
-<li>Added <code><a href="https://graemeleehickey.github.io/adaptDiag">library(adaptDiag)</a></code> setup chunks to both vignettes, which were missing and caused failures when vignettes were built in a clean subprocess.</li>
-<li>Fixed <code>%\VignetteIndexEntry{}</code> titles in both vignettes to match their YAML titles.</li>
-<li>Improved test coverage from 80% to 95%, adding tests for <code><a href="../reference/binom_sample_size.html">binom_sample_size()</a></code>, <code><a href="../reference/multi_trial.html">multi_trial()</a></code> input validation, and <code><a href="../reference/summarise_trials.html">summarise_trials()</a></code> decision branches.</li>
+<ul><li>
+<code><a href="../reference/multi_trial.html">multi_trial()</a></code> gains a <code>seed</code> argument for reproducible simulations, addressing a user request in <a href="https://github.com/graemeleehickey/adaptDiag/issues/5" class="external-link">#5</a>. Reproducibility is implemented via <code>doRNG::%dorng%</code>, which correctly handles RNG stream splitting across all parallel backends.</li>
+<li>
+<code><a href="../reference/multi_trial.html">multi_trial()</a></code> now uses a single <code>foreach</code> + <code>doRNG::%dorng%</code> dispatch path for all platforms, replacing the previous platform-specific branches (<code><a href="https://rdrr.io/pkg/pbmcapply/man/pbmclapply.html" class="external-link">pbmcapply::pbmclapply</a></code> on Unix, <code>foreach::%dopar%</code> on Windows). This fixes a latent Windows bug and simplifies the implementation. <code>pbmcapply</code> has been removed as a dependency and <code>doRNG</code> added.</li>
+<li>Fixed the contingency table error reported in <a href="https://github.com/graemeleehickey/adaptDiag/issues/5" class="external-link">#5</a> that occurred when a simulated dataset had zero observations in a cell at early interim looks.</li>
 </ul></div>
     <div class="section level2">
 <h2 class="pkg-version" data-toc-text="0.1.1" id="adaptdiag-011">adaptDiag 0.1.1<a class="anchor" aria-label="anchor" href="#adaptdiag-011"></a></h2>

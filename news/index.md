@@ -2,64 +2,23 @@
 
 ## adaptDiag 0.1.2.9000
 
-- Fixed a bug in
-  [`multi_trial()`](https://graemeleehickey.github.io/adaptDiag/reference/multi_trial.md)
-  where the Windows `foreach` parallel branch called
-  `single_trial_wrapper()` without passing the iteration argument,
-  causing silent incorrect behaviour on Windows.
-- Fixed a bug in
-  [`multi_trial()`](https://graemeleehickey.github.io/adaptDiag/reference/multi_trial.md)
-  where specifying `ncores < 1` triggered a warning but did not reset
-  the value to 1, causing a downstream error.
-- Fixed a bug in `analysis()` where a simulated dataset with zero
-  observations in any cell of the 2x2 contingency table (possible at
-  early looks with low prevalence) would cause an error. The table is
-  now constructed using [`factor()`](https://rdrr.io/r/base/factor.html)
-  with explicit levels to guarantee all cells are always present.
-- Fixed scalar logical checks throughout
-  [`multi_trial()`](https://graemeleehickey.github.io/adaptDiag/reference/multi_trial.md)
-  that used `|` and `&` (vectorised) instead of `||` and `&&`
-  (short-circuit).
-- Fixed `1:n` idioms that are unsafe for zero-length inputs; replaced
-  with [`seq_len()`](https://rdrr.io/r/base/seq.html) and
-  [`seq_along()`](https://rdrr.io/r/base/seq.html) throughout.
-- Fixed all roxygen2 comment prefixes in `R/binom_test_power.R` from
-  `##'` to `#'`; documentation for
-  [`binom_sample_size()`](https://graemeleehickey.github.io/adaptDiag/reference/binom_sample_size.md)
-  was previously never generated from source.
-- Fixed a broken `\link{\code{}}` tag in internal documentation for
-  `analysis()`.
-- Fixed several typos in
-  [`multi_trial()`](https://graemeleehickey.github.io/adaptDiag/reference/multi_trial.md)
-  documentation: `\code{code = "both"}` corrected to
-  `\code{endpoint = "both"}`, and doubled words (“the the”, “for for”)
-  removed.
-- Fixed a duplicate `\item` bullet in `evaluate_trial()` internal
-  documentation; the “insufficient positive cases” outcome now has the
-  correct label.
-- Fixed the test description in `test-both.R` which incorrectly
-  described a sensitivity-only test as “both test works”.
-- Removed dead code in `simulate_data()` that handled a `NULL`
-  `n_at_looks` argument that could never occur.
-- Added a pkgdown site with Bootstrap 5, structured reference index,
-  articles, and a GitHub Actions deploy workflow targeting GitHub Pages
-  (#).
-- Updated GitHub Actions workflows to latest standards:
-  `actions/checkout@v6`, `codecov/codecov-action@v7` (SHA-pinned),
-  `actions/upload-artifact@v7`, and removed deprecated `use-public-rspm`
-  option.
-- Added
-  [`library(adaptDiag)`](https://graemeleehickey.github.io/adaptDiag)
-  setup chunks to both vignettes, which were missing and caused failures
-  when vignettes were built in a clean subprocess.
-- Fixed `%\VignetteIndexEntry{}` titles in both vignettes to match their
-  YAML titles.
-- Improved test coverage from 80% to 95%, adding tests for
-  [`binom_sample_size()`](https://graemeleehickey.github.io/adaptDiag/reference/binom_sample_size.md),
-  [`multi_trial()`](https://graemeleehickey.github.io/adaptDiag/reference/multi_trial.md)
-  input validation, and
-  [`summarise_trials()`](https://graemeleehickey.github.io/adaptDiag/reference/summarise_trials.md)
-  decision branches.
+- [`multi_trial()`](https://graemeleehickey.github.io/adaptDiag/reference/multi_trial.md)
+  gains a `seed` argument for reproducible simulations, addressing a
+  user request in
+  [\#5](https://github.com/graemeleehickey/adaptDiag/issues/5).
+  Reproducibility is implemented via `doRNG::%dorng%`, which correctly
+  handles RNG stream splitting across all parallel backends.
+- [`multi_trial()`](https://graemeleehickey.github.io/adaptDiag/reference/multi_trial.md)
+  now uses a single `foreach` + `doRNG::%dorng%` dispatch path for all
+  platforms, replacing the previous platform-specific branches
+  ([`pbmcapply::pbmclapply`](https://rdrr.io/pkg/pbmcapply/man/pbmclapply.html)
+  on Unix, `foreach::%dopar%` on Windows). This fixes a latent Windows
+  bug and simplifies the implementation. `pbmcapply` has been removed as
+  a dependency and `doRNG` added.
+- Fixed the contingency table error reported in
+  [\#5](https://github.com/graemeleehickey/adaptDiag/issues/5) that
+  occurred when a simulated dataset had zero observations in a cell at
+  early interim looks.
 
 ## adaptDiag 0.1.1
 

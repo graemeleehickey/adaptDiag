@@ -79,11 +79,10 @@ data <- multi_trial(
 summarise_trials(data, fut = 0.05, min_pos = 10)
 #>                    n
 #> decision            200 400 600 800 1000
-#>   early win           1   3   7   2    0
+#>   early win           5   6   3   2    0
 #>   late win            0   0   0   0    2
-#>   no stopping         0   0   0   0    1
-#>   stop for futility   2   1   0   1    0
+#>   stop for futility   1   0   0   1    0
 #> 
-#>   power stop_futility n_avg     sens      spec mean_pos
-#> 1  0.75           0.2   590 0.871873 0.9481486    57.65
+#>   power stop_futility n_avg      sens      spec mean_pos
+#> 1   0.9           0.1   490 0.9024721 0.9525038    49.25
 ```

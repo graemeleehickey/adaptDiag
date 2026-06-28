@@ -23,6 +23,7 @@ multi_trial(
   n_at_looks,
   n_mc = 10000,
   n_trials = 1000,
+  seed = NULL,
   ncores
 )
 ```
@@ -105,6 +106,12 @@ multi_trial(
 
   integer. The number of clinical trials to simulate overall, which will
   be used to evaluate the operating characteristics.
+
+- seed:
+
+  integer. Optional random seed passed to
+  [`set.seed`](https://rdrr.io/r/base/Random.html) before simulations
+  begin, to ensure reproducibility. Default is `NULL` (no seed set).
 
 - ncores:
 
@@ -244,12 +251,13 @@ calculate the probability for both endpoints simultaneously.
 ## Parallelization
 
 To use multiple cores (where available), the argument `ncores` can be
-increased from the default of 1. On UNIX machines (including macOS),
-parallelization is performed using the
-[`mclapply`](https://rdrr.io/r/parallel/mclapply.html) function with
-`ncores` \\\>1\\. On Windows machines, parallel processing is
-implemented via the
-[`foreach`](https://rdrr.io/pkg/foreach/man/foreach.html) function.
+increased from the default of 1. Parallelization uses
+[`registerDoParallel`](https://rdrr.io/pkg/doParallel/man/registerDoParallel.html)
+with a PSOCK cluster, which works on all platforms including Windows.
+The [`%dorng%`](https://rdrr.io/pkg/doRNG/man/grapes-dorng-grapes.html)
+operator from the doRNG package is used in place of the standard
+`%dopar%`, ensuring that results are fully reproducible across all
+backends when a `seed` is supplied.
 
 ## Examples
 
@@ -272,4 +280,6 @@ multi_trial(
   n_trials = 2,
   ncores = 1
 )
+#> Loading required package: foreach
+#> Loading required package: rngtools
 ```

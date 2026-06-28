@@ -75,6 +75,7 @@
 <span>  <span class="va">n_at_looks</span>,</span>
 <span>  n_mc <span class="op">=</span> <span class="fl">10000</span>,</span>
 <span>  n_trials <span class="op">=</span> <span class="fl">1000</span>,</span>
+<span>  seed <span class="op">=</span> <span class="cn">NULL</span>,</span>
 <span>  <span class="va">ncores</span></span>
 <span><span class="op">)</span></span></code></pre></div>
     </div>
@@ -159,6 +160,12 @@ Beta-Binomial distribution.</p></dd>
 <dt id="arg-n-trials">n_trials<a class="anchor" aria-label="anchor" href="#arg-n-trials"></a></dt>
 <dd><p>integer. The number of clinical trials to simulate overall,
 which will be used to evaluate the operating characteristics.</p></dd>
+
+
+<dt id="arg-seed">seed<a class="anchor" aria-label="anchor" href="#arg-seed"></a></dt>
+<dd><p>integer. Optional random seed passed to <code><a href="https://rdrr.io/r/base/Random.html" class="external-link">set.seed</a></code>
+before simulations begin, to ensure reproducibility. Default is <code>NULL</code>
+(no seed set).</p></dd>
 
 
 <dt id="arg-ncores">ncores<a class="anchor" aria-label="anchor" href="#arg-ncores"></a></dt>
@@ -270,10 +277,12 @@ the probability for both endpoints simultaneously.</p>
 
 
 <p>To use multiple cores (where available), the argument <code>ncores</code> can be
-increased from the default of 1. On UNIX machines (including macOS),
-parallelization is performed using the <code><a href="https://rdrr.io/r/parallel/mclapply.html" class="external-link">mclapply</a></code>
-function with <code>ncores</code> \(&gt;1\). On Windows machines, parallel
-processing is implemented via the <code><a href="https://rdrr.io/pkg/foreach/man/foreach.html" class="external-link">foreach</a></code> function.</p>
+increased from the default of 1. Parallelization uses
+<code><a href="https://rdrr.io/pkg/doParallel/man/registerDoParallel.html" class="external-link">registerDoParallel</a></code> with a PSOCK cluster, which
+works on all platforms including Windows. The
+<code><a href="https://rdrr.io/pkg/doRNG/man/grapes-dorng-grapes.html" class="external-link">%dorng%</a></code> operator from the <span class="pkg">doRNG</span> package is
+used in place of the standard <code>%dopar%</code>, ensuring that results are
+fully reproducible across all backends when a <code>seed</code> is supplied.</p>
     </div>
 
     <div class="section level2">
@@ -296,6 +305,8 @@ processing is implemented via the <code><a href="https://rdrr.io/pkg/foreach/man
 <span class="r-in"><span>  n_trials <span class="op">=</span> <span class="fl">2</span>,</span></span>
 <span class="r-in"><span>  ncores <span class="op">=</span> <span class="fl">1</span></span></span>
 <span class="r-in"><span><span class="op">)</span></span></span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: foreach</span>
+<span class="r-msg co"><span class="r-pr">#&gt;</span> Loading required package: rngtools</span>
 <span class="r-in"><span></span></span>
 </code></pre></div>
     </div>

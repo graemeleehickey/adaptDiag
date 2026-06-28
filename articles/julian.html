@@ -164,7 +164,9 @@ function as follows:</p>
 <span>  n_at_looks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html" class="external-link">seq</a></span><span class="op">(</span><span class="fl">200</span>, <span class="fl">700</span>, <span class="fl">50</span><span class="op">)</span>,</span>
 <span>  n_mc <span class="op">=</span> <span class="fl">10000</span>,</span>
 <span>  n_trials <span class="op">=</span> <span class="fl">200</span>,</span>
-<span>  ncores <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span></code></pre></div>
+<span>  ncores <span class="op">=</span> <span class="fl">1L</span><span class="op">)</span></span>
+<span><span class="co">#&gt; Loading required package: foreach</span></span>
+<span><span class="co">#&gt; Loading required package: rngtools</span></span></code></pre></div>
 <p>Here, we have only simulated 200 trials here, using a total of 1
 core. In general, <code>n_trials</code> should be larger, and
 <code>ncores</code> should be set as large as possible dependent on the
@@ -187,12 +189,12 @@ characteristic as follows:</p>
 <code class="sourceCode R"><span><span class="fu"><a href="../reference/summarise_trials.html">summarise_trials</a></span><span class="op">(</span><span class="va">fit_power</span>, min_pos <span class="op">=</span> <span class="fl">30</span>, fut <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                    n</span></span>
 <span><span class="co">#&gt; decision            200 250 300 350 400 450 500 550 600 650 700</span></span>
-<span><span class="co">#&gt;   early win          58  31  23  24  17  11   7   4   4   2   0</span></span>
-<span><span class="co">#&gt;   late win            0   0   0   0   0   0   0   0   0   0   2</span></span>
-<span><span class="co">#&gt;   no stopping         0   0   0   0   0   0   0   0   0   0   2</span></span>
-<span><span class="co">#&gt;   stop for futility   3   0   2   1   1   0   4   1   2   1   0</span></span>
-<span><span class="co">#&gt;   power stop_futility  n_avg      sens      spec mean_pos</span></span>
-<span><span class="co">#&gt; 1 0.915         0.075 324.75 0.8360627 0.9651927    64.62</span></span></code></pre></div>
+<span><span class="co">#&gt;   early win          71  21  27  22  10  14   8   2   2   6   0</span></span>
+<span><span class="co">#&gt;   late win            0   0   0   0   0   0   0   0   0   0   5</span></span>
+<span><span class="co">#&gt;   no stopping         0   0   0   0   0   0   0   0   0   0   3</span></span>
+<span><span class="co">#&gt;   stop for futility   1   0   2   0   1   1   0   0   1   3   0</span></span>
+<span><span class="co">#&gt;   power stop_futility  n_avg     sens      spec mean_pos</span></span>
+<span><span class="co">#&gt; 1  0.94         0.045 327.75 0.841612 0.9653305   65.665</span></span></code></pre></div>
 <p>The printed output shows a table with columns listing the sample size
 looks, and rows listing the reasons for the trial stopping. Below this
 table we also see estimates of the study power, average sample size,
@@ -207,10 +209,10 @@ calculate this by assuming the true values are equal to the null.</p>
 <span></span>
 <span><span class="fu"><a href="../reference/summarise_trials.html">summarise_trials</a></span><span class="op">(</span><span class="va">fit_type1</span>, min_pos <span class="op">=</span> <span class="fl">30</span>, fut <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span>
 <span><span class="co">#&gt;                    n</span></span>
-<span><span class="co">#&gt; decision            200 250 300 350 400 450 500 550</span></span>
-<span><span class="co">#&gt;   stop for futility 158  21  11   5   1   2   1   1</span></span>
-<span><span class="co">#&gt;   power stop_futility  n_avg      sens      spec mean_pos</span></span>
-<span><span class="co">#&gt; 1     0             1 221.25 0.6892618 0.9013496    44.42</span></span></code></pre></div>
+<span><span class="co">#&gt; decision            200 250 300 350 400 550</span></span>
+<span><span class="co">#&gt;   stop for futility 160  17  14   5   2   2</span></span>
+<span><span class="co">#&gt;   power stop_futility n_avg      sens      spec mean_pos</span></span>
+<span><span class="co">#&gt; 1     0             1 220.5 0.6939263 0.8972075    44.07</span></span></code></pre></div>
 <p>The operating characteristics show the type I error is well
 controlled at the 5% level. <strong>Note</strong>: in practice, one
 should run many simulations (at least 10,000) to get accurate estimates
